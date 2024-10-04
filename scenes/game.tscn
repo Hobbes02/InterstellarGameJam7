@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/game.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.501961, 0.501961, 0.501961, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("base:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "animations"
+length = 10.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("base:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 360.0 ]
+}
+
+[node name="game" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="background" type="ColorRect" parent="." index="0"]
+margin_left = -20.0
+margin_top = -19.0
+margin_right = 276.0
+margin_bottom = 168.0
+color = Color( 0.176471, 0.176471, 0.176471, 1 )
+
+[node name="basehealth" type="ProgressBar" parent="." index="1"]
+margin_left = 120.0
+margin_top = 58.0
+margin_right = 136.0
+margin_bottom = 63.0
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
+value = 100.0
+percent_visible = false
+
+[node name="base" type="Polygon2D" parent="." index="2"]
+position = Vector2( 128, 75 )
+scale = Vector2( 0.461538, 0.461538 )
+color = Color( 0.243137, 0.223529, 0.878431, 1 )
+offset = Vector2( -0.333313, 4.00003 )
+polygon = PoolVector2Array( 0, -23.8333, -17.3333, 10.8334, 17.3333, 10.8334 )
+
+[node name="Line2D" type="Line2D" parent="base" index="0"]
+visible = false
+z_index = 5
+points = PoolVector2Array( 0, -15.1666, -15.1667, 13, 15.1667, 13, 0, -15.1666 )
+width = 2.0
+default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="enemies" type="Node2D" parent="." index="3"]
+
+[node name="enemyspawntimer" type="Timer" parent="." index="4"]
+wait_time = 60.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
+autoplay = "animations"
+anims/RESET = SubResource( 2 )
+anims/animations = SubResource( 1 )
+
+[node name="overlay" type="ColorRect" parent="." index="8"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -20.0
+margin_top = -19.0
+margin_right = 276.0
+margin_bottom = 168.0
+mouse_filter = 2
+color = Color( 0.733333, 0.733333, 0.733333, 1 )
+
+[connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]

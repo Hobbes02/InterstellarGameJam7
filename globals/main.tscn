@@ -6,7 +6,7 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-start_scene = "res://scenes/scene.tscn"
+start_scene = "res://scenes/game.tscn"
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_right = 40.0
