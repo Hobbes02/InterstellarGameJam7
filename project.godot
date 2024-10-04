@@ -11,7 +11,12 @@ config_version=4
 [application]
 
 config/name="Interstellar Game Jam 7"
+run/main_scene="res://globals/main.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+SceneManager="*res://globals/scene_manager.gd"
 
 [gui]
 

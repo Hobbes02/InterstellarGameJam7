@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://globals/main.gd" type="Script" id=1]
+
+[node name="main" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+start_scene = "res://scenes/scene.tscn"
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 4, 4 )
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 256, 150 )
+handle_input_locally = false
+render_target_update_mode = 3
