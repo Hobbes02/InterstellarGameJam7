@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/game.gd" type="Script" id=2]
+[ext_resource path="res://objects/player.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 1, 1, 1 )
@@ -98,5 +99,9 @@ margin_right = 276.0
 margin_bottom = 168.0
 mouse_filter = 2
 color = Color( 0.733333, 0.733333, 0.733333, 1 )
+
+[node name="player" parent="." index="9" instance=ExtResource( 3 )]
+position = Vector2( 128, 75 )
+_current_possessing_node = NodePath("../base")
 
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]

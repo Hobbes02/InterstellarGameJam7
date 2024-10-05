@@ -2,7 +2,7 @@ extends Node2D
 
 const ENEMY = preload("res://objects/enemy.tscn")
 
-var enemy_spawn_rate: int = 20
+var enemy_spawn_rate: int = 50
 
 onready var enemy_target: Node = $base
 onready var enemies: Node2D = $enemies
@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 		Globals.elevated = false
 	
 	if Input.is_action_pressed("elevate"):
-		overlay.modulate.a = lerp(overlay.modulate.a, 0.6, 0.05)
+		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 0.05)
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0.0, 0.05)
