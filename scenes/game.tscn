@@ -1,15 +1,22 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/game.gd" type="Script" id=2]
 [ext_resource path="res://objects/player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://objects/enemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/fonts/vermin_vibes_1989/Vermin Vibes 1989.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 148, 9.75 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 48
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 5 )
 
 [node name="game" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -25,14 +32,11 @@ color = Color( 0.176471, 0.176471, 0.176471, 1 )
 
 [node name="enemies" type="Node2D" parent="." index="2"]
 
-[node name="enemy" parent="enemies" index="0" instance=ExtResource( 4 )]
-position = Vector2( 128, 75 )
-
 [node name="enemyspawntimer" type="Timer" parent="." index="3"]
 wait_time = 60.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." index="6"]
-collision_layer = 30
+collision_layer = 0
 collision_mask = 30
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="0"]
@@ -62,12 +66,26 @@ color = Color( 0.733333, 0.733333, 0.733333, 1 )
 
 [node name="player" parent="." index="8" instance=ExtResource( 3 )]
 position = Vector2( 128, 75 )
-_current_possessing_node = NodePath("../enemies/enemy")
 
-[node name="Label" type="Label" parent="." index="9"]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="deathlabel" type="Label" parent="." index="9"]
+visible = false
+margin_left = 61.0
+margin_top = 51.0
+margin_right = 196.0
+margin_bottom = 94.0
+custom_colors/font_color = Color( 0.505882, 0.188235, 0.188235, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "DEATH"
 
-[connection signal="player_die" from="enemies/enemy" to="." method="_on_player_die"]
-[connection signal="shoot_bullet" from="enemies/enemy" to="." method="_on_shoot_bullet"]
+[node name="deathlabel2" type="Label" parent="deathlabel" index="0"]
+margin_left = -1.0
+margin_top = 38.0
+margin_right = 134.0
+margin_bottom = 81.0
+custom_colors/font_color = Color( 0.505882, 0.188235, 0.188235, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "space to
+replay"
+align = 1
+
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]

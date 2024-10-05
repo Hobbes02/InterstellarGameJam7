@@ -12,6 +12,9 @@ signal player_die(node)
 
 var velocity: Vector2
 
+var max_health: int = 2
+var health: int = 2
+
 var ai_speed: int = 6
 var player_speed: int = 40
 
@@ -46,13 +49,15 @@ func _ready() -> void:
 			bullet_speed = 60
 			bullets_per_mag = 4
 			reload_time = 1.4
+			max_health = 3
 		ENEMY_TYPES.SHOOTER:
 			$shooter.show()
 			line_2d = $shooter/Line2D
-			ai_speed = 6
+			ai_speed = 8
 			bullet_speed = 80
 			bullets_per_mag = 9
-			reload_time = 0.5
+			reload_time = 1.8
+			max_health = 4
 		ENEMY_TYPES.DRUNK:
 			$drunk.show()
 			line_2d = $drunk/Line2D
@@ -60,7 +65,9 @@ func _ready() -> void:
 			bullet_speed = 55
 			bullets_per_mag = 6
 			reload_time = 1.0
+			max_health = 2
 	
+	health = max_health
 	player_speed = ai_speed * 4.5
 	bullets_left_in_mag = bullets_per_mag
 	reloadtimer.wait_time = reload_time
