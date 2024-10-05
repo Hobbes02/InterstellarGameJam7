@@ -16,13 +16,14 @@ var is_player_controlling: bool = false
 var enemy_type: int = ENEMY_TYPES.DRUNK
 
 onready var line_2d: Line2D
+onready var selected: Sprite = $selected
 
 
 func _ready() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	enemy_type = rng.randi_range(0, 2)
-	print(enemy_type)
+	
 	match enemy_type:
 		ENEMY_TYPES.BASIC:
 			$basic.show()

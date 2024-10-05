@@ -2,7 +2,7 @@ extends Node2D
 
 const ENEMY = preload("res://objects/enemy.tscn")
 
-var enemy_spawn_rate: int = 50
+var enemy_spawn_rate: int = 20
 
 onready var enemy_target: Node = $base
 onready var enemies: Node2D = $enemies
@@ -11,6 +11,7 @@ onready var enemyspawntimer: Timer = $enemyspawntimer
 onready var base_outline: Line2D = $base/Line2D
 onready var overlay: ColorRect = $overlay
 onready var basehealth: ProgressBar = $basehealth
+onready var player: KinematicBody2D = $player
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -31,8 +32,18 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("elevate"):
 		Globals.elevated = true
+		enemyspawntimer.paused = true
+		for e in enemies.get_children():
+			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
 		Globals.elevated = false
+		enemyspawntimer.paused = false
+		for e in enemies.get_children():
+			e.is_player_controlling = false
+		if player.current_hovering_enemy != null:
+			player.current_hovering_enemy.is_player_controlling = true
+			player.current_possessing_node = player.current_hovering_enemy
+		
 	
 	if Input.is_action_pressed("elevate"):
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)

@@ -77,8 +77,8 @@ polygon = PoolVector2Array( 0, -23.8333, -17.3333, 10.8334, 17.3333, 10.8334 )
 [node name="Line2D" type="Line2D" parent="base" index="0"]
 visible = false
 z_index = 5
-points = PoolVector2Array( 0, -15.1666, -15.1667, 13, 15.1667, 13, 0, -15.1666 )
-width = 2.0
+points = PoolVector2Array( 0, -10.8333, -10.8333, 10.8334, 10.8333, 10.8334, 0, -10.8333 )
+width = 4.0
 default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
 
 [node name="enemies" type="Node2D" parent="." index="3"]
@@ -93,9 +93,9 @@ anims/animations = SubResource( 1 )
 
 [node name="overlay" type="ColorRect" parent="." index="8"]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = -20.0
+margin_left = -29.0
 margin_top = -19.0
-margin_right = 276.0
+margin_right = 267.0
 margin_bottom = 168.0
 mouse_filter = 2
 color = Color( 0.733333, 0.733333, 0.733333, 1 )

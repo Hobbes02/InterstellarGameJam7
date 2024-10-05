@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://objects/enemy.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/circle.png" type="Texture" id=2]
+[ext_resource path="res://assets/art/circle_outline.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 4, 4 )
@@ -59,3 +60,11 @@ z_index = 5
 points = PoolVector2Array( -3, 0, -2, -2, 0, -3, 2, -2, 3, 0, 2, 2, 0, 3, -2, 2, -3, 0 )
 width = 2.0
 default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+
+[node name="selected" type="Sprite" parent="."]
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -2.38419e-07, 2.38419e-07 )
+scale = Vector2( 0.367188, 0.367188 )
+z_index = 16
+texture = ExtResource( 3 )

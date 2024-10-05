@@ -9,9 +9,13 @@ var current_hovering_enemy: Node = null
 export(NodePath) var _current_possessing_node
 
 onready var current_possessing_node: Node = get_node(_current_possessing_node)
+onready var area: Area2D = $Area2D
 
 
 func _physics_process(_delta: float) -> void:
+	if current_hovering_enemy != null:
+		current_hovering_enemy.selected.show()
+	
 	if !Globals.elevated:
 		hide()
 		if current_possessing_node.is_inside_tree():
@@ -32,10 +36,15 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_Area2D_body_entered(body: Node) -> void:
-	if current_hovering_enemy == null:
-		current_hovering_enemy = body
+	if !Globals.elevated:
+		return
+	current_hovering_enemy = body
+	
+	for b in area.get_overlapping_bodies():
+		if b != body:
+			b.selected.hide()
 
 
 func _on_Area2D_body_exited(body: Node) -> void:
-	if (current_hovering_enemy != null) and (current_hovering_enemy == body):
-		current_hovering_enemy = null
+	current_hovering_enemy = null
+	body.selected.hide()
