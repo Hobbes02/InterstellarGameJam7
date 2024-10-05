@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://objects/enemy.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/circle.png" type="Texture" id=2]
@@ -7,9 +7,13 @@
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 4, 4 )
 
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
 [node name="enemy" type="KinematicBody2D"]
-collision_layer = 3
-collision_mask = 3
+collision_mask = 11
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -20,7 +24,7 @@ visible = false
 
 [node name="Polygon2D" type="Polygon2D" parent="basic"]
 position = Vector2( 4, 4 )
-color = Color( 0.988235, 0.27451, 0.27451, 1 )
+color = Color( 0.486275, 1, 0.196078, 1 )
 polygon = PoolVector2Array( -8, -8, 0, -8, 0, 0, -8, 0 )
 
 [node name="Line2D" type="Line2D" parent="basic"]
@@ -49,7 +53,7 @@ default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
 visible = false
 
 [node name="circle" type="Sprite" parent="drunk"]
-modulate = Color( 1, 0.658824, 0.172549, 1 )
+modulate = Color( 0.227451, 0.337255, 0.933333, 1 )
 position = Vector2( -5.96046e-08, 4.47035e-08 )
 scale = Vector2( 0.125, 0.125 )
 texture = ExtResource( 2 )
@@ -68,3 +72,25 @@ position = Vector2( -2.38419e-07, 2.38419e-07 )
 scale = Vector2( 0.367188, 0.367188 )
 z_index = 16
 texture = ExtResource( 3 )
+
+[node name="enemyshoottimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="reloadtimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="reloadindicator" type="ProgressBar" parent="."]
+visible = false
+margin_left = 5.0
+margin_top = 4.0
+margin_right = 13.0
+margin_bottom = 7.0
+rect_rotation = -90.0
+custom_styles/fg = SubResource( 6 )
+custom_styles/bg = SubResource( 7 )
+value = 100.0
+percent_visible = false
+
+[connection signal="timeout" from="enemyshoottimer" to="." method="_on_enemyshoottimer_timeout"]
+[connection signal="timeout" from="reloadtimer" to="." method="_on_reloadtimer_timeout"]
