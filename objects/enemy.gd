@@ -33,8 +33,10 @@ onready var line_2d: Line2D
 onready var selected: Sprite = $selected
 onready var rng = RandomNumberGenerator.new()
 onready var reloadtimer: Timer = $reloadtimer
-onready var reloadindicator: ProgressBar = $reloadindicator
+onready var reloadindicator: ProgressBar = $indicators/reloadindicator
+onready var indicators: Node2D = $indicators
 onready var enemyshoottimer: Timer = $enemyshoottimer
+onready var healthbar: ProgressBar = $indicators/healthbar
 
 
 func _ready() -> void:
@@ -73,6 +75,8 @@ func _ready() -> void:
 	reloadtimer.wait_time = reload_time
 	
 	enemyshoottimer.wait_time = reload_time * 2
+	
+	healthbar.max_value = max_health
 
 
 func _physics_process(delta: float) -> void:
@@ -81,14 +85,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		line_2d.hide()
 	
-	reloadindicator.rect_rotation = -90 - rotation_degrees
-	
 	if reloadtimer.time_left > 0.05:
 		reloadindicator.value = 100 / (reloadtimer.wait_time / reloadtimer.time_left)
 	else:
 		reloadindicator.hide()
 	
 	if is_player_controlling and !Globals.elevated:
+		healthbar.show()
 		collision_layer = 3
 		collision_mask = 17
 		var input_vector: Vector2
@@ -117,6 +120,8 @@ func _physics_process(delta: float) -> void:
 					emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 8, Color(1, 0.658824, 0.172549))
 					bullets_left_in_mag -= 1
 	else:
+		if health == max_health:
+			healthbar.hide()
 		collision_layer = 1
 		collision_mask = 11
 		if target != null and target.is_inside_tree():
@@ -128,11 +133,21 @@ func _physics_process(delta: float) -> void:
 	move_and_slide(velocity * Globals.speed_scale)
 
 
+func _process(delta: float) -> void:
+	indicators.rotation_degrees = -rotation_degrees
+
+
 func take_damage() -> void:
-	if !is_player_controlling:
-		queue_free()
-	else:
-		emit_signal("player_die", self)
+	health -= 1
+	
+	healthbar.show()
+	healthbar.value = health
+	
+	if health <= 0:
+		if !is_player_controlling:
+			queue_free()
+		else:
+			emit_signal("player_die", self)
 
 
 func _on_reloadtimer_timeout() -> void:

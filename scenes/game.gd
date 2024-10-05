@@ -33,6 +33,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if enemies.get_child_count() < 2 and !Globals.dead:
+		spawn_enemy()
 	if Input.is_action_just_pressed("elevate"):
 		if Globals.dead:
 			Globals.dead = false
@@ -52,7 +54,6 @@ func _process(_delta: float) -> void:
 			player.current_possessing_node = player.current_hovering_enemy
 		elif player.current_possessing_node != null:
 			player.current_possessing_node.is_player_controlling = true
-		
 	
 	if Input.is_action_pressed("elevate"):
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
@@ -87,13 +88,13 @@ func spawn_enemy(spawn_location: Vector2 = Vector2.ZERO) -> Node:
 		var side = rng.randi_range(0, 3)
 		match side:
 			0:
-				spawn_location = Vector2(-5, rng.randi_range(-5, 155))
+				spawn_location = Vector2(-10, rng.randi_range(-10, 160))
 			1:
-				spawn_location = Vector2(rng.randi_range(-5, 262), -5)
+				spawn_location = Vector2(rng.randi_range(-10, 266), -10)
 			2:
-				spawn_location = Vector2(276, rng.randi_range(-5, 155))
+				spawn_location = Vector2(276, rng.randi_range(-10, 160))
 			3:
-				spawn_location = Vector2(rng.randi_range(-5, 262), 155)
+				spawn_location = Vector2(rng.randi_range(-10, 266), 160)
 	
 	var enemy = ENEMY.instance()
 	enemy.connect("shoot_bullet", self, "_on_shoot_bullet")

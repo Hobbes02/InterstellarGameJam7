@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://objects/enemy.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/circle.png" type="Texture" id=2]
@@ -12,6 +12,12 @@ bg_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxEmpty" id=7]
 
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.398959, 1, 0.363281, 1 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.0967981, 0.484375, 0.0737915, 1 )
+
 [node name="enemy" type="KinematicBody2D"]
 collision_mask = 11
 script = ExtResource( 1 )
@@ -24,7 +30,7 @@ visible = false
 
 [node name="Polygon2D" type="Polygon2D" parent="basic"]
 position = Vector2( 4, 4 )
-color = Color( 0.486275, 1, 0.196078, 1 )
+color = Color( 0.141176, 1, 0.0901961, 1 )
 polygon = PoolVector2Array( -8, -8, 0, -8, 0, 0, -8, 0 )
 
 [node name="Line2D" type="Line2D" parent="basic"]
@@ -80,16 +86,30 @@ autostart = true
 [node name="reloadtimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="reloadindicator" type="ProgressBar" parent="."]
-visible = false
-margin_left = 5.0
-margin_top = 4.0
-margin_right = 13.0
-margin_bottom = 7.0
+[node name="indicators" type="Node2D" parent="."]
+
+[node name="reloadindicator" type="ProgressBar" parent="indicators"]
+margin_left = -3.99219
+margin_top = 5.00781
+margin_right = 4.00781
+margin_bottom = 8.00781
 rect_rotation = -90.0
+rect_pivot_offset = Vector2( 3.99219, -5 )
 custom_styles/fg = SubResource( 6 )
 custom_styles/bg = SubResource( 7 )
 value = 100.0
+percent_visible = false
+
+[node name="healthbar" type="ProgressBar" parent="indicators"]
+visible = false
+margin_left = -6.0
+margin_top = -9.0
+margin_right = 6.0
+margin_bottom = -6.0
+rect_pivot_offset = Vector2( 6, 2 )
+custom_styles/fg = SubResource( 10 )
+custom_styles/bg = SubResource( 9 )
+value = 60.0
 percent_visible = false
 
 [connection signal="timeout" from="enemyshoottimer" to="." method="_on_enemyshoottimer_timeout"]
