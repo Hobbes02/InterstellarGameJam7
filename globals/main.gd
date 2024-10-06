@@ -12,7 +12,7 @@ func _ready() -> void:
 	_on_change_scene_requested(start_scene)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if viewport.is_inside_tree():
 		SceneManager.mouse_position = (get_global_mouse_position() / 4) - viewport.canvas_transform.origin
 

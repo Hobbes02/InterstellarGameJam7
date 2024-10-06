@@ -1,0 +1,158 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
+[ext_resource path="res://objects/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/fonts/upheaval/upheavtt.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://objects/portal.tscn" type="PackedScene" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 93.5 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 148, 9.75 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 4 )
+
+[node name="tutorial" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="background" type="ColorRect" parent="." index="0"]
+margin_left = -20.0
+margin_top = -19.0
+margin_right = 276.0
+margin_bottom = 168.0
+color = Color( 0.176471, 0.176471, 0.176471, 1 )
+
+[node name="bullets" type="Node2D" parent="." index="1"]
+
+[node name="enemies" type="Node2D" parent="." index="2"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="5"]
+collision_layer = 0
+collision_mask = 30
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="0"]
+position = Vector2( -10, 74 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" index="1"]
+position = Vector2( 266, 74.5 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" index="2"]
+position = Vector2( 128, -9.75 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D" index="3"]
+position = Vector2( 128, 159 )
+shape = SubResource( 2 )
+
+[node name="tutorial" parent="." index="6" instance=ExtResource( 5 )]
+position = Vector2( 65, 74 )
+
+[node name="text" type="Label" parent="tutorial" index="3"]
+margin_left = -38.0
+margin_top = -32.0
+margin_right = 39.0
+margin_bottom = -17.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "tutorial"
+
+[node name="game" parent="." index="7" instance=ExtResource( 5 )]
+position = Vector2( 193, 75 )
+
+[node name="text" type="Label" parent="game" index="3"]
+margin_left = -46.0
+margin_top = 12.0
+margin_right = 52.0
+margin_bottom = 45.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "i've played
+before"
+align = 1
+
+[node name="startgame" type="Label" parent="game" index="4"]
+visible = false
+margin_left = -46.0
+margin_top = 12.0
+margin_right = 52.0
+margin_bottom = 45.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "start game"
+align = 1
+
+[node name="overlay" type="ColorRect" parent="." index="8"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -20.0
+margin_top = -19.0
+margin_right = 276.0
+margin_bottom = 168.0
+mouse_filter = 2
+color = Color( 0.733333, 0.733333, 0.733333, 1 )
+
+[node name="tutorialnodes" type="Node2D" parent="." index="9"]
+
+[node name="wasdtomove" type="Label" parent="tutorialnodes" index="0"]
+visible = false
+margin_left = 11.0
+margin_top = 27.0
+margin_right = 124.0
+margin_bottom = 42.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "wasd to move"
+
+[node name="clicktoshoot" type="Label" parent="tutorialnodes" index="1"]
+visible = false
+margin_left = 64.0
+margin_top = 27.0
+margin_right = 193.0
+margin_bottom = 42.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "click to shoot"
+
+[node name="spacetoelevate" type="Label" parent="tutorialnodes" index="2"]
+visible = false
+margin_left = 31.0
+margin_top = 27.0
+margin_right = 227.0
+margin_bottom = 42.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "hold space to elevate"
+align = 1
+
+[node name="elevatepossess" type="Label" parent="tutorialnodes" index="3"]
+visible = false
+margin_left = 20.0
+margin_top = 27.0
+margin_right = 244.0
+margin_bottom = 60.0
+custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "elevate and move over
+an enemy to possess it"
+align = 1
+
+[node name="player" parent="." index="10" instance=ExtResource( 3 )]
+
+[node name="wasdtomove" type="Label" parent="." index="11"]
+visible = false
+margin_left = 64.0
+margin_top = 27.0
+margin_right = 193.0
+margin_bottom = 60.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "wasd to move
+here too"
+align = 1
+
+[connection signal="body_entered" from="tutorial" to="." method="_on_tutorial_body_entered"]
+[connection signal="body_entered" from="game" to="." method="_on_game_body_entered"]

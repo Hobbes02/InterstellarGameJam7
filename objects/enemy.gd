@@ -5,6 +5,7 @@ enum ENEMY_TYPES {
 	BASIC, 
 	SHOOTER, 
 	DRUNK, 
+	TUTORIAL, 
 }
 
 signal shoot_bullet(from, speed, target, mask)
@@ -27,7 +28,9 @@ var bullets_left_in_mag: int = bullets_per_mag
 var target: Node = null
 var is_player_controlling: bool = false
 
-var enemy_type: int = ENEMY_TYPES.DRUNK
+var enemy_type: int = -1
+
+var can_shoot: bool = true
 
 onready var line_2d: Line2D
 onready var selected: Sprite = $selected
@@ -41,7 +44,8 @@ onready var healthbar: ProgressBar = $indicators/healthbar
 
 func _ready() -> void:
 	rng.randomize()
-	enemy_type = rng.randi_range(0, 2)
+	if enemy_type == -1:
+		enemy_type = rng.randi_range(0, 2)
 	
 	match enemy_type:
 		ENEMY_TYPES.BASIC:
@@ -63,11 +67,19 @@ func _ready() -> void:
 		ENEMY_TYPES.DRUNK:
 			$drunk.show()
 			line_2d = $drunk/Line2D
-			ai_speed = 8
+			ai_speed = 12
 			bullet_speed = 55
 			bullets_per_mag = 6
 			reload_time = 1.0
 			max_health = 2
+		ENEMY_TYPES.TUTORIAL:
+			$drunk.show()
+			line_2d = $drunk/Line2D
+			ai_speed = 8
+			bullet_speed = 60
+			bullets_per_mag = 2
+			reload_time = 1.4
+			max_health = 3
 	
 	health = max_health
 	player_speed = ai_speed * 4.5
@@ -104,6 +116,8 @@ func _physics_process(delta: float) -> void:
 		look_at(SceneManager.mouse_position)
 		
 		if Input.is_action_just_pressed("shoot"):
+			if !can_shoot:
+				return
 			if bullets_left_in_mag <= 0:
 				if reloadtimer.is_stopped():
 					reloadtimer.start()
@@ -129,6 +143,9 @@ func _physics_process(delta: float) -> void:
 			look_at(target.global_position)
 		else:
 			velocity = lerp(velocity, Vector2.ZERO, 0.2)
+		
+		if enemy_type == ENEMY_TYPES.TUTORIAL:
+			velocity = Vector2.ZERO
 	
 	move_and_slide(velocity * Globals.speed_scale)
 

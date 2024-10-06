@@ -35,7 +35,19 @@ color = Color( 0.176471, 0.176471, 0.176471, 1 )
 [node name="enemyspawntimer" type="Timer" parent="." index="3"]
 wait_time = 60.0
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." index="6"]
+[node name="overlay" type="ColorRect" parent="." index="6"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -20.0
+margin_top = -19.0
+margin_right = 276.0
+margin_bottom = 168.0
+mouse_filter = 2
+color = Color( 0.733333, 0.733333, 0.733333, 1 )
+
+[node name="player" parent="." index="7" instance=ExtResource( 3 )]
+position = Vector2( 128, 75 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="8"]
 collision_layer = 0
 collision_mask = 30
 
@@ -54,18 +66,6 @@ shape = SubResource( 2 )
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D" index="3"]
 position = Vector2( 128, 159 )
 shape = SubResource( 2 )
-
-[node name="overlay" type="ColorRect" parent="." index="7"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -20.0
-margin_top = -19.0
-margin_right = 276.0
-margin_bottom = 168.0
-mouse_filter = 2
-color = Color( 0.733333, 0.733333, 0.733333, 1 )
-
-[node name="player" parent="." index="8" instance=ExtResource( 3 )]
-position = Vector2( 128, 75 )
 
 [node name="deathlabel" type="Label" parent="." index="9"]
 visible = false

@@ -89,6 +89,7 @@ one_shot = true
 [node name="indicators" type="Node2D" parent="."]
 
 [node name="reloadindicator" type="ProgressBar" parent="indicators"]
+visible = false
 margin_left = -3.99219
 margin_top = 5.00781
 margin_right = 4.00781
