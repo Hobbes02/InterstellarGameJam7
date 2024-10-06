@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/random_reload.mp3-5ddbc9e54058ad76c16353c9a03cb5a0.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/random_reload.mp3"
+dest_files=[ "res://.import/random_reload.mp3-5ddbc9e54058ad76c16353c9a03cb5a0.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

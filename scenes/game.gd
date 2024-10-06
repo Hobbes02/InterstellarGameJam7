@@ -14,6 +14,7 @@ onready var overlay: TextureRect = $overlay
 onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
 onready var weaponlabel: Label = $weaponlabel
+onready var camera: Camera2D = $camera
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -21,7 +22,7 @@ onready var rng = RandomNumberGenerator.new()
 func _ready() -> void:
 	rng.randomize()
 	enemyspawntimer.wait_time = 60.0 / enemy_spawn_rate
-	enemy_spawn_rate = 20
+	enemy_spawn_rate = 5
 	enemyspawntimer.start()
 	spawn_enemy()
 	
@@ -36,7 +37,7 @@ func _ready() -> void:
 	weaponlabel.text = player.current_possessing_node.weapon_type
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if enemies.get_child_count() < 2 and !Globals.dead:
 		spawn_enemy()
 	if Input.is_action_just_pressed("elevate"):
@@ -65,9 +66,17 @@ func _process(_delta: float) -> void:
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 0.05)
 		if player.current_hovering_enemy != null:
-			overlay.start_color = player.current_hovering_enemy.color
+			overlay.start_color = lerp(
+				overlay.start_color,
+				player.current_hovering_enemy.color,
+				10.0 * delta
+			)
 		else:
-			overlay.start_color = Color(0.988235, 0.27451, 0.27451)
+			overlay.start_color = lerp(
+				overlay.start_color,
+				Color(0.988235, 0.27451, 0.27451),
+				10.0 * delta
+			)
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0.0, 0.05)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1.0, 0.05)

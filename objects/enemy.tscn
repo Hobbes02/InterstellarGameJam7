@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://objects/enemy.gd" type="Script" id=1]
 [ext_resource path="res://assets/art/circle.png" type="Texture" id=2]
 [ext_resource path="res://assets/art/circle_outline.png" type="Texture" id=3]
+[ext_resource path="res://assets/sfx/throw.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sfx/shoot.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sfx/hit.wav" type="AudioStream" id=6]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 4, 4 )
@@ -80,7 +83,6 @@ z_index = 16
 texture = ExtResource( 3 )
 
 [node name="enemyshoottimer" type="Timer" parent="."]
-one_shot = true
 autostart = true
 
 [node name="reloadtimer" type="Timer" parent="."]
@@ -112,6 +114,50 @@ custom_styles/fg = SubResource( 10 )
 custom_styles/bg = SubResource( 9 )
 value = 60.0
 percent_visible = false
+
+[node name="deathparticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 12
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+lifetime_randomness = 0.57
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 30.0
+linear_accel = -42.21
+scale_amount = 3.0
+scale_amount_random = 0.6
+color = Color( 0.8125, 0.8125, 0.8125, 1 )
+
+[node name="damageparticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 5
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+lifetime_randomness = 0.57
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 100.0
+linear_accel = -400.0
+scale_amount = 2.0
+scale_amount_random = 0.6
+color = Color( 0.8125, 0.8125, 0.8125, 1 )
+
+[node name="shoot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+bus = "SFX"
+
+[node name="hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+bus = "SFX"
+
+[node name="throw" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "SFX"
+
+[node name="reload" type="AudioStreamPlayer" parent="."]
 
 [connection signal="timeout" from="enemyshoottimer" to="." method="_on_enemyshoottimer_timeout"]
 [connection signal="timeout" from="reloadtimer" to="." method="_on_reloadtimer_timeout"]

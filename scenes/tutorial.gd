@@ -42,6 +42,7 @@ func _process(_delta: float) -> void:
 				$tutorialnodes/wasdtomove.hide()
 				player.current_possessing_node.can_shoot = true
 				$tutorialnodes/clicktoshoot.show()
+				$game.global_position = Vector2(128, 100)
 		1:
 			if !is_instance_valid(tutorial_enemy):
 				current_tutorial_step = 2
@@ -63,7 +64,6 @@ func _process(_delta: float) -> void:
 				$game.show()
 				$game/text.hide()
 				$game/startgame.show()
-				$game.global_position = Vector2(128, 100)
 				current_tutorial_step = 4
 	
 	if Input.is_action_just_pressed("elevate"):

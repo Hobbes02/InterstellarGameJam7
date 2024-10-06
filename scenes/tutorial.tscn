@@ -3,7 +3,7 @@
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
 [ext_resource path="res://objects/player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/fonts/upheaval/upheavtt.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/8bit_wonder/8-BIT WONDER.TTF" type="DynamicFontData" id=4]
 [ext_resource path="res://objects/portal.tscn" type="PackedScene" id=5]
 [ext_resource path="res://objects/elevated.tscn" type="PackedScene" id=6]
 
@@ -14,6 +14,7 @@ extents = Vector2( 10, 93.5 )
 extents = Vector2( 148, 9.75 )
 
 [sub_resource type="DynamicFont" id=3]
+size = 12
 font_data = ExtResource( 4 )
 
 [node name="tutorial" instance=ExtResource( 1 )]
@@ -54,9 +55,9 @@ shape = SubResource( 2 )
 position = Vector2( 65, 74 )
 
 [node name="text" type="Label" parent="tutorial" index="3"]
-margin_left = -38.0
+margin_left = -44.0
 margin_top = -32.0
-margin_right = 39.0
+margin_right = 46.0
 margin_bottom = -17.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -66,10 +67,10 @@ text = "tutorial"
 position = Vector2( 193, 75 )
 
 [node name="text" type="Label" parent="game" index="3"]
-margin_left = -46.0
-margin_top = 12.0
-margin_right = 52.0
-margin_bottom = 45.0
+margin_left = -52.0
+margin_top = 11.0
+margin_right = 56.0
+margin_bottom = 44.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "i've played
@@ -78,9 +79,9 @@ align = 1
 
 [node name="startgame" type="Label" parent="game" index="4"]
 visible = false
-margin_left = -46.0
+margin_left = -59.0
 margin_top = 12.0
-margin_right = 52.0
+margin_right = 61.0
 margin_bottom = 45.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -101,9 +102,9 @@ text = "wasd to move"
 
 [node name="clicktoshoot" type="Label" parent="tutorialnodes" index="1"]
 visible = false
-margin_left = 64.0
+margin_left = 52.0
 margin_top = 27.0
-margin_right = 193.0
+margin_right = 202.0
 margin_bottom = 42.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -111,9 +112,9 @@ text = "click to shoot"
 
 [node name="spacetoelevate" type="Label" parent="tutorialnodes" index="2"]
 visible = false
-margin_left = 31.0
+margin_left = 15.0
 margin_top = 27.0
-margin_right = 227.0
+margin_right = 249.0
 margin_bottom = 42.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -122,10 +123,10 @@ align = 1
 
 [node name="elevatepossess" type="Label" parent="tutorialnodes" index="3"]
 visible = false
-margin_left = 20.0
-margin_top = 27.0
-margin_right = 244.0
-margin_bottom = 60.0
+margin_left = 9.0
+margin_top = 24.0
+margin_right = 249.0
+margin_bottom = 57.0
 custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "elevate and move over
@@ -139,9 +140,9 @@ modulate = Color( 1, 1, 1, 0 )
 
 [node name="wasdtomove" type="Label" parent="." index="9"]
 visible = false
-margin_left = 64.0
+margin_left = 52.0
 margin_top = 27.0
-margin_right = 193.0
+margin_right = 196.0
 margin_bottom = 60.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )

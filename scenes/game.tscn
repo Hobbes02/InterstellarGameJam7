@@ -19,7 +19,7 @@ font_data = ExtResource( 5 )
 [sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=11]
 font_data = ExtResource( 5 )
 
 [node name="game" instance=ExtResource( 1 )]
@@ -41,7 +41,6 @@ wait_time = 60.0
 
 [node name="overlay" parent="." index="4" instance=ExtResource( 4 )]
 modulate = Color( 1, 1, 1, 0 )
-start_color = Color( 0.988235, 0.27451, 0.27451, 1 )
 
 [node name="player" parent="." index="7" instance=ExtResource( 3 )]
 position = Vector2( 128, 75 )
@@ -92,6 +91,6 @@ margin_left = 4.0
 margin_top = 2.0
 margin_right = 58.0
 margin_bottom = 16.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 11 )
 
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/pistol_reload.mp3-7e5096d967c231f24f39983470eccbe9.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/pistol_reload.mp3"
+dest_files=[ "res://.import/pistol_reload.mp3-7e5096d967c231f24f39983470eccbe9.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

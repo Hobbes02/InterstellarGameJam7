@@ -43,6 +43,12 @@ onready var reloadindicator: ProgressBar = $indicators/reloadindicator
 onready var indicators: Node2D = $indicators
 onready var enemyshoottimer: Timer = $enemyshoottimer
 onready var healthbar: ProgressBar = $indicators/healthbar
+onready var deathparticles: CPUParticles2D = $deathparticles
+onready var damageparticles: CPUParticles2D = $damageparticles
+onready var shoot: AudioStreamPlayer = $shoot
+onready var hit: AudioStreamPlayer = $hit
+onready var throw: AudioStreamPlayer = $throw
+onready var reload: AudioStreamPlayer = $reload
 
 
 func _ready() -> void:
@@ -61,6 +67,7 @@ func _ready() -> void:
 			max_health = 3
 			weapon_type = "pistol"
 			color = $basic/Polygon2D.color
+			reload.stream = preload("res://assets/sfx/pistol_reload.mp3")
 		ENEMY_TYPES.SHOOTER:
 			$shooter.show()
 			line_2d = $shooter/Line2D
@@ -71,6 +78,8 @@ func _ready() -> void:
 			max_health = 4
 			weapon_type = "shotgun"
 			color = $shooter/Polygon2D.color
+			reload.stream = preload("res://assets/sfx/shotgun_reload.mp3")
+			reload.volume_db = 5
 		ENEMY_TYPES.DRUNK:
 			$drunk.show()
 			line_2d = $drunk/Line2D
@@ -78,9 +87,10 @@ func _ready() -> void:
 			bullet_speed = 55
 			bullets_per_mag = 6
 			reload_time = 1.0
-			max_health = 2
+			max_health = 5
 			weapon_type = "random"
 			color = $drunk/circle.modulate
+			reload.stream = preload("res://assets/sfx/random_reload.mp3")
 		ENEMY_TYPES.TUTORIAL:
 			$drunk.show()
 			line_2d = $drunk/Line2D
@@ -91,15 +101,19 @@ func _ready() -> void:
 			max_health = 3
 			weapon_type = "pistol"
 			color = $drunk/circle.modulate
+			reload.stream = preload("res://assets/sfx/pistol_reload.mp3")
 	
 	health = max_health
 	player_speed = ai_speed * 4.5
 	bullets_left_in_mag = bullets_per_mag
 	reloadtimer.wait_time = reload_time
 	
-	enemyshoottimer.wait_time = reload_time * 2
+	enemyshoottimer.wait_time = reload_time * 4
 	
 	healthbar.max_value = max_health
+	
+	deathparticles.color = color
+	damageparticles.color = color
 
 
 func _physics_process(delta: float) -> void:
@@ -133,7 +147,10 @@ func _physics_process(delta: float) -> void:
 				if reloadtimer.is_stopped():
 					reloadtimer.start()
 					reloadindicator.show()
+					reload.play()
 			else:
+				shoot.volume_db = 0
+				shoot.play()
 				var bullet_target: Vector2 = SceneManager.mouse_position
 				if enemy_type == ENEMY_TYPES.DRUNK:
 					bullet_target = Vector2(rng.randi_range(0, 256), rng.randi_range(0, 150))
@@ -168,14 +185,29 @@ func _process(delta: float) -> void:
 func take_damage() -> void:
 	health -= 1
 	
+	hit.play()
+	
 	healthbar.show()
 	healthbar.value = health
 	
+	damageparticles.emitting = true
+	
 	if health <= 0:
 		if !is_player_controlling:
-			queue_free()
+			$basic.hide()
+			$shooter.hide()
+			$drunk.hide()
+			healthbar.hide()
+			deathparticles.emitting = true
+			enemyshoottimer.stop()
+			$CollisionShape2D.set_deferred("disabled", true)
+			get_tree().create_timer(1).connect("timeout", self, "_on_particles_finished")
 		else:
 			emit_signal("player_die", self)
+
+
+func _on_particles_finished() -> void:
+	queue_free()
 
 
 func _on_reloadtimer_timeout() -> void:
@@ -187,6 +219,9 @@ func _on_enemyshoottimer_timeout() -> void:
 	if is_player_controlling or Globals.elevated:
 		return
 	var bullet_target: Vector2
+	if enemy_type != ENEMY_TYPES.TUTORIAL:
+		shoot.volume_db = -10
+		shoot.play()
 	match enemy_type:
 		ENEMY_TYPES.BASIC:
 			bullet_target = target.global_position + Vector2(rng.randi_range(-20, 20), rng.randi_range(-20, 20))
