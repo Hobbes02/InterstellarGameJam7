@@ -59,7 +59,7 @@ default_color = Color( 0.396078, 0.396078, 0.396078, 1 )
 visible = false
 
 [node name="circle" type="Sprite" parent="drunk"]
-modulate = Color( 0.227451, 0.337255, 0.933333, 1 )
+modulate = Color( 0.227451, 0.537255, 0.933333, 1 )
 position = Vector2( -5.96046e-08, 4.47035e-08 )
 scale = Vector2( 0.125, 0.125 )
 texture = ExtResource( 2 )

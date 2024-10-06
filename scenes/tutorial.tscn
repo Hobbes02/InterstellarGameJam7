@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
 [ext_resource path="res://objects/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/fonts/upheaval/upheavtt.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://objects/portal.tscn" type="PackedScene" id=5]
+[ext_resource path="res://objects/elevated.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
@@ -29,7 +30,7 @@ color = Color( 0.176471, 0.176471, 0.176471, 1 )
 
 [node name="enemies" type="Node2D" parent="." index="2"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." index="5"]
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="3"]
 collision_layer = 0
 collision_mask = 30
 
@@ -49,7 +50,7 @@ shape = SubResource( 2 )
 position = Vector2( 128, 159 )
 shape = SubResource( 2 )
 
-[node name="tutorial" parent="." index="6" instance=ExtResource( 5 )]
+[node name="tutorial" parent="." index="4" instance=ExtResource( 5 )]
 position = Vector2( 65, 74 )
 
 [node name="text" type="Label" parent="tutorial" index="3"]
@@ -61,7 +62,7 @@ custom_colors/font_color = Color( 0.714844, 0.714844, 0.714844, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "tutorial"
 
-[node name="game" parent="." index="7" instance=ExtResource( 5 )]
+[node name="game" parent="." index="5" instance=ExtResource( 5 )]
 position = Vector2( 193, 75 )
 
 [node name="text" type="Label" parent="game" index="3"]
@@ -86,16 +87,7 @@ custom_fonts/font = SubResource( 3 )
 text = "start game"
 align = 1
 
-[node name="overlay" type="ColorRect" parent="." index="8"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -20.0
-margin_top = -19.0
-margin_right = 276.0
-margin_bottom = 168.0
-mouse_filter = 2
-color = Color( 0.733333, 0.733333, 0.733333, 1 )
-
-[node name="tutorialnodes" type="Node2D" parent="." index="9"]
+[node name="tutorialnodes" type="Node2D" parent="." index="6"]
 
 [node name="wasdtomove" type="Label" parent="tutorialnodes" index="0"]
 visible = false
@@ -140,9 +132,12 @@ text = "elevate and move over
 an enemy to possess it"
 align = 1
 
-[node name="player" parent="." index="10" instance=ExtResource( 3 )]
+[node name="overlay" parent="." index="7" instance=ExtResource( 6 )]
+modulate = Color( 1, 1, 1, 0 )
 
-[node name="wasdtomove" type="Label" parent="." index="11"]
+[node name="player" parent="." index="8" instance=ExtResource( 3 )]
+
+[node name="wasdtomove" type="Label" parent="." index="9"]
 visible = false
 margin_left = 64.0
 margin_top = 27.0

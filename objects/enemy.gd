@@ -29,8 +29,11 @@ var target: Node = null
 var is_player_controlling: bool = false
 
 var enemy_type: int = -1
+var weapon_type: String = ""
 
 var can_shoot: bool = true
+
+var color: Color
 
 onready var line_2d: Line2D
 onready var selected: Sprite = $selected
@@ -53,9 +56,11 @@ func _ready() -> void:
 			line_2d = $basic/Line2D
 			ai_speed = 10
 			bullet_speed = 60
-			bullets_per_mag = 4
+			bullets_per_mag = 6
 			reload_time = 1.4
 			max_health = 3
+			weapon_type = "pistol"
+			color = $basic/Polygon2D.color
 		ENEMY_TYPES.SHOOTER:
 			$shooter.show()
 			line_2d = $shooter/Line2D
@@ -64,6 +69,8 @@ func _ready() -> void:
 			bullets_per_mag = 9
 			reload_time = 1.8
 			max_health = 4
+			weapon_type = "shotgun"
+			color = $shooter/Polygon2D.color
 		ENEMY_TYPES.DRUNK:
 			$drunk.show()
 			line_2d = $drunk/Line2D
@@ -72,6 +79,8 @@ func _ready() -> void:
 			bullets_per_mag = 6
 			reload_time = 1.0
 			max_health = 2
+			weapon_type = "random"
+			color = $drunk/circle.modulate
 		ENEMY_TYPES.TUTORIAL:
 			$drunk.show()
 			line_2d = $drunk/Line2D
@@ -80,6 +89,8 @@ func _ready() -> void:
 			bullets_per_mag = 2
 			reload_time = 1.4
 			max_health = 3
+			weapon_type = "pistol"
+			color = $drunk/circle.modulate
 	
 	health = max_health
 	player_speed = ai_speed * 4.5

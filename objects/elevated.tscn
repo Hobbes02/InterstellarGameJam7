@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://objects/elevated.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+
+// Our gradient texture.
+uniform sampler2D colormap : hint_black;
+
+void fragment() {
+	// Sample the node's texture and extract the red channel from the image.
+	float noise = texture(TEXTURE, UV).r;
+	// Convert the noise value to a horizontal position to sample the gradient texture.
+	vec2 uv_noise = vec2(noise, 0);
+	// Replace greyscale values from the input texture by a color from the gradient texture.
+	COLOR = texture(colormap, uv_noise);
+}"
+
+[sub_resource type="Gradient" id=8]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.567742 )
+colors = PoolColorArray( 0.988235, 0.27451, 0.27451, 1, 0.929412, 0.901961, 0.207843, 1 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/colormap = SubResource( 9 )
+
+[sub_resource type="OpenSimplexNoise" id=5]
+
+[sub_resource type="NoiseTexture" id=4]
+width = 296
+height = 182
+noise = SubResource( 5 )
+
+[sub_resource type="Animation" id=11]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:cutoff")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "animation"
+length = 20.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:cutoff")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 20.0, 85.0 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 10, 20 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "increase_seed"
+}, {
+"args": [  ],
+"method": "increase_seed"
+} ]
+}
+
+[node name="elevated" type="TextureRect"]
+material = SubResource( 7 )
+margin_left = -19.0
+margin_top = -15.0
+margin_right = 277.0
+margin_bottom = 167.0
+texture = SubResource( 4 )
+script = ExtResource( 1 )
+end_color = Color( 0.8125, 0.8125, 0.8125, 1 )
+cutoff = 0.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "animation"
+anims/RESET = SubResource( 11 )
+anims/animation = SubResource( 10 )

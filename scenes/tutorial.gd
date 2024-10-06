@@ -13,7 +13,7 @@ var tutorial_enemy: Node = null
 onready var enemies: Node2D = $enemies
 onready var bullets: Node2D = $bullets
 onready var background: ColorRect = $background
-onready var overlay: ColorRect = $overlay
+onready var overlay: TextureRect = $overlay
 onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
 onready var tutorialnodes: Node2D = $tutorialnodes
@@ -24,7 +24,6 @@ onready var rng = RandomNumberGenerator.new()
 func _ready() -> void:
 	for l in tutorialnodes.get_children():
 		l.hide()
-	
 	
 	player.current_possessing_node = spawn_enemy(Vector2(128, 75), Enemy.ENEMY_TYPES.TUTORIAL)
 	player.current_possessing_node.can_shoot = false
@@ -65,7 +64,6 @@ func _process(_delta: float) -> void:
 				$game/text.hide()
 				$game/startgame.show()
 				$game.global_position = Vector2(128, 100)
-				yield(get_tree(), "idle_frame")
 				current_tutorial_step = 4
 	
 	if Input.is_action_just_pressed("elevate"):
@@ -93,6 +91,10 @@ func _process(_delta: float) -> void:
 			return
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 0.05)
+		if player.current_hovering_enemy != null:
+			overlay.start_color = player.current_hovering_enemy.color
+		else:
+			overlay.start_color = Color(0.988235, 0.27451, 0.27451)
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0.0, 0.05)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1.0, 0.05)
