@@ -41,11 +41,11 @@ onready var enemy_stats: Dictionary = {
 		"color": $dodger/circle.modulate, 
 		"speed": 12, 
 		"bullet_speed": 55, 
-		"bullets_per_mag": 6, 
+		"bullets_per_mag": 1, 
 		"max_health": 5, 
 		"reload_time": 1.0, 
-		"reload_sound": preload("res://assets/sfx/random_reload.mp3"), 
-		"weapon_type": "random", 
+		"reload_sound": null, 
+		"weapon_type": "grenade", 
 		"points": 15
 	}, 
 	ENEMY_TYPES.TUTORIAL: {
@@ -64,7 +64,8 @@ onready var enemy_stats: Dictionary = {
 }
 
 
-signal shoot_bullet(from, speed, target, mask)
+signal shoot_bullet(from, speed, target, mask, color)
+signal throw_grenade(from, target, mask, color)
 signal player_die(node)
 
 var velocity: Vector2
@@ -137,8 +138,8 @@ func _ready() -> void:
 	weapon_type = e.weapon_type
 	points = e.points
 	
-	if enemy_type == ENEMY_TYPES.SHOOTER:
-		reload.volume_db = 20
+	if enemy_type == ENEMY_TYPES.DODGER:
+		shoot.stream = preload("res://assets/sfx/throw.wav")
 
 
 func _physics_process(delta: float) -> void:
@@ -178,8 +179,9 @@ func _physics_process(delta: float) -> void:
 				shoot.play()
 				var bullet_target: Vector2 = SceneManager.mouse_position
 				if enemy_type == ENEMY_TYPES.DODGER:
-					bullet_target = Vector2(rng.randi_range(0, 256), rng.randi_range(0, 150))
-				if enemy_type == ENEMY_TYPES.SHOOTER:
+					emit_signal("throw_grenade", global_position, bullet_target, 8, Color(1, 0.658824, 0.172549))
+					bullets_left_in_mag -= 1
+				elif enemy_type == ENEMY_TYPES.SHOOTER:
 					for i in [bullet_target, bullet_target + Vector2(40, 40), bullet_target - Vector2(40, 40)]:
 						emit_signal("shoot_bullet", global_position, bullet_speed, i, 8, Color(1, 0.658824, 0.172549))
 					bullets_left_in_mag -= 3
@@ -244,18 +246,15 @@ func _on_enemyshoottimer_timeout() -> void:
 	enemyshoottimer.start()
 	if is_player_controlling or Globals.elevated:
 		return
-	var bullet_target: Vector2
+	var bullet_target: Vector2 = target.global_position + Vector2(rng.randi_range(-20, 20), rng.randi_range(-20, 20))
 	if enemy_type != ENEMY_TYPES.TUTORIAL:
 		shoot.volume_db = -10
 		shoot.play()
 	match enemy_type:
 		ENEMY_TYPES.BASIC:
-			bullet_target = target.global_position + Vector2(rng.randi_range(-20, 20), rng.randi_range(-20, 20))
 			emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 16, Color(0.988235, 0.27451, 0.27451))
 		ENEMY_TYPES.DODGER:
-			bullet_target = Vector2(rng.randi_range(0, 256), rng.randi_range(0, 150))
-			emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 16, Color(0.988235, 0.27451, 0.27451))
+			emit_signal("throw_grenade", global_position, bullet_target, 16, Color(0.988235, 0.27451, 0.27451))
 		ENEMY_TYPES.SHOOTER:
-			bullet_target = target.global_position + Vector2(rng.randi_range(-20, 20), rng.randi_range(-20, 20))
 			for i in [bullet_target, bullet_target + Vector2(40, 40), bullet_target - Vector2(40, 40)]:
 				emit_signal("shoot_bullet", global_position, bullet_speed, i, 16, Color(0.988235, 0.27451, 0.27451))

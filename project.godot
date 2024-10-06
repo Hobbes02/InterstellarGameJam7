@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Interstellar Game Jam 7"
+config/name="Possessive"
 run/main_scene="res://globals/main.tscn"
 config/icon="res://icon.png"
 

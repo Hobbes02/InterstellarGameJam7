@@ -2,6 +2,7 @@ extends Node2D
 
 const ENEMY = preload("res://objects/enemy.tscn")
 const BULLET = preload("res://objects/bullet.tscn")
+const GRENADE = preload("res://objects/grenade.tscn")
 
 var enemy_spawn_rate: int = 5
 var enemy_spawn_increase_rate: int = 8
@@ -20,7 +21,7 @@ onready var pointslabel: Label = $pointslabel
 onready var rng = RandomNumberGenerator.new()
 
 
-func _ready() -> void:
+func start() -> void:
 	rng.randomize()
 	enemyspawntimer.wait_time = 60.0 / enemy_spawn_rate
 	enemy_spawn_rate = 5
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("elevate"):
 		if Globals.dead:
 			Globals.dead = false
-			_ready()
+			start()
 			return
 		Globals.elevated = true
 		enemyspawntimer.paused = true
@@ -94,6 +95,13 @@ func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask
 	b.shoot(speed, target, collision_mask, color)
 
 
+func _on_throw_grenade(from: Vector2, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
+	var g = GRENADE.instance()
+	g.global_position = from
+	bullets.add_child(g)
+	g.throw(target, collision_mask, color)
+
+
 func _on_player_die(node: Node) -> void:
 	player.current_possessing_node = null
 	node.queue_free()
@@ -124,6 +132,7 @@ func spawn_enemy(spawn_location: Vector2 = Vector2.ZERO, enemy_type: int = -1) -
 	
 	var enemy = ENEMY.instance()
 	enemy.connect("shoot_bullet", self, "_on_shoot_bullet")
+	enemy.connect("throw_grenade", self, "_on_throw_grenade")
 	enemy.connect("player_die", self, "_on_player_die")
 	enemy.enemy_type = enemy_type
 	enemies.add_child(enemy)

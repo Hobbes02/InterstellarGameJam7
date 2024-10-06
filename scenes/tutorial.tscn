@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/fonts/8bit_wonder/8-BIT WONDER.TTF" type="DynamicFontData" id=4]
 [ext_resource path="res://objects/portal.tscn" type="PackedScene" id=5]
 [ext_resource path="res://objects/elevated.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/music/tutorial.mp3" type="AudioStream" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
@@ -16,6 +17,61 @@ extents = Vector2( 148, 9.75 )
 [sub_resource type="DynamicFont" id=3]
 size = 12
 font_data = ExtResource( 4 )
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("music:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "fadeout"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("music:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, -80.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="tutorial" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -149,6 +205,23 @@ custom_fonts/font = SubResource( 3 )
 text = "wasd to move
 here too"
 align = 1
+
+[node name="music" type="AudioStreamPlayer" parent="." index="12"]
+stream = ExtResource( 7 )
+autoplay = true
+bus = "Music"
+
+[node name="animations" type="AnimationPlayer" parent="." index="13"]
+anims/RESET = SubResource( 5 )
+anims/fadeout = SubResource( 4 )
+
+[node name="fade" type="ColorRect" parent="." index="14"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -15.0
+margin_top = -12.0
+margin_right = 271.0
+margin_bottom = 163.0
+color = Color( 0, 0, 0, 1 )
 
 [connection signal="body_entered" from="tutorial" to="." method="_on_tutorial_body_entered"]
 [connection signal="body_entered" from="game" to="." method="_on_game_body_entered"]
