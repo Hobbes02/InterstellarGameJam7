@@ -4,9 +4,65 @@ extends KinematicBody2D
 enum ENEMY_TYPES {
 	BASIC, 
 	SHOOTER, 
-	DRUNK, 
+	DODGER, 
 	TUTORIAL, 
 }
+
+onready var enemy_stats: Dictionary = {
+	ENEMY_TYPES.BASIC: {
+		"node": $basic, 
+		"line": $basic/Line2D, 
+		"color": $basic/Polygon2D.color, 
+		"speed": 10, 
+		"bullet_speed": 60, 
+		"bullets_per_mag": 6, 
+		"max_health": 4, 
+		"reload_time": 1.4, 
+		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
+		"weapon_type": "pistol", 
+		"points": 5
+	}, 
+	ENEMY_TYPES.SHOOTER: {
+		"node": $shooter, 
+		"line": $shooter/Line2D, 
+		"color": $shooter/Polygon2D.color, 
+		"speed": 6, 
+		"bullet_speed": 80, 
+		"bullets_per_mag": 9, 
+		"max_health": 4, 
+		"reload_time": 1.8, 
+		"reload_sound": preload("res://assets/sfx/shotgun_reload.mp3"), 
+		"weapon_type": "shotgun", 
+		"points": 10
+	}, 
+	ENEMY_TYPES.DODGER: {
+		"node": $dodger, 
+		"line": $dodger/Line2D, 
+		"color": $dodger/circle.modulate, 
+		"speed": 12, 
+		"bullet_speed": 55, 
+		"bullets_per_mag": 6, 
+		"max_health": 5, 
+		"reload_time": 1.0, 
+		"reload_sound": preload("res://assets/sfx/random_reload.mp3"), 
+		"weapon_type": "random", 
+		"points": 15
+	}, 
+	ENEMY_TYPES.TUTORIAL: {
+		"node": $dodger, 
+		"line": $dodger/Line2D, 
+		"color": $dodger/circle.modulate, 
+		"speed": 8, 
+		"bullet_speed": 60, 
+		"bullets_per_mag": 2, 
+		"max_health": 3, 
+		"reload_time": 1.4, 
+		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
+		"weapon_type": "pistol", 
+		"points": 0
+	}
+}
+
 
 signal shoot_bullet(from, speed, target, mask)
 signal player_die(node)
@@ -35,6 +91,8 @@ var can_shoot: bool = true
 
 var color: Color
 
+var points: int = 0
+
 onready var line_2d: Line2D
 onready var selected: Sprite = $selected
 onready var rng = RandomNumberGenerator.new()
@@ -56,64 +114,31 @@ func _ready() -> void:
 	if enemy_type == -1:
 		enemy_type = rng.randi_range(0, 2)
 	
-	match enemy_type:
-		ENEMY_TYPES.BASIC:
-			$basic.show()
-			line_2d = $basic/Line2D
-			ai_speed = 10
-			bullet_speed = 60
-			bullets_per_mag = 6
-			reload_time = 1.4
-			max_health = 3
-			weapon_type = "pistol"
-			color = $basic/Polygon2D.color
-			reload.stream = preload("res://assets/sfx/pistol_reload.mp3")
-		ENEMY_TYPES.SHOOTER:
-			$shooter.show()
-			line_2d = $shooter/Line2D
-			ai_speed = 8
-			bullet_speed = 80
-			bullets_per_mag = 9
-			reload_time = 1.8
-			max_health = 4
-			weapon_type = "shotgun"
-			color = $shooter/Polygon2D.color
-			reload.stream = preload("res://assets/sfx/shotgun_reload.mp3")
-			reload.volume_db = 5
-		ENEMY_TYPES.DRUNK:
-			$drunk.show()
-			line_2d = $drunk/Line2D
-			ai_speed = 12
-			bullet_speed = 55
-			bullets_per_mag = 6
-			reload_time = 1.0
-			max_health = 5
-			weapon_type = "random"
-			color = $drunk/circle.modulate
-			reload.stream = preload("res://assets/sfx/random_reload.mp3")
-		ENEMY_TYPES.TUTORIAL:
-			$drunk.show()
-			line_2d = $drunk/Line2D
-			ai_speed = 8
-			bullet_speed = 60
-			bullets_per_mag = 2
-			reload_time = 1.4
-			max_health = 3
-			weapon_type = "pistol"
-			color = $drunk/circle.modulate
-			reload.stream = preload("res://assets/sfx/pistol_reload.mp3")
+	# set up stats:
 	
-	health = max_health
-	player_speed = ai_speed * 4.5
-	bullets_left_in_mag = bullets_per_mag
-	reloadtimer.wait_time = reload_time
+	var e = enemy_stats[enemy_type]
 	
-	enemyshoottimer.wait_time = reload_time * 4
-	
-	healthbar.max_value = max_health
-	
+	e.node.show()
+	line_2d = e.line
+	color = e.color
 	deathparticles.color = color
 	damageparticles.color = color
+	ai_speed = e.speed
+	player_speed = ai_speed * 4.5
+	bullet_speed = e.bullet_speed
+	bullets_per_mag = e.bullets_per_mag
+	bullets_left_in_mag = bullets_per_mag
+	max_health = e.max_health
+	health = max_health
+	healthbar.max_value = max_health
+	reloadtimer.wait_time = e.reload_time
+	enemyshoottimer.wait_time = e.reload_time * 4
+	reload.stream = e.reload_sound
+	weapon_type = e.weapon_type
+	points = e.points
+	
+	if enemy_type == ENEMY_TYPES.SHOOTER:
+		reload.volume_db = 20
 
 
 func _physics_process(delta: float) -> void:
@@ -152,7 +177,7 @@ func _physics_process(delta: float) -> void:
 				shoot.volume_db = 0
 				shoot.play()
 				var bullet_target: Vector2 = SceneManager.mouse_position
-				if enemy_type == ENEMY_TYPES.DRUNK:
+				if enemy_type == ENEMY_TYPES.DODGER:
 					bullet_target = Vector2(rng.randi_range(0, 256), rng.randi_range(0, 150))
 				if enemy_type == ENEMY_TYPES.SHOOTER:
 					for i in [bullet_target, bullet_target + Vector2(40, 40), bullet_target - Vector2(40, 40)]:
@@ -196,11 +221,12 @@ func take_damage() -> void:
 		if !is_player_controlling:
 			$basic.hide()
 			$shooter.hide()
-			$drunk.hide()
+			$dodger.hide()
 			healthbar.hide()
 			deathparticles.emitting = true
 			enemyshoottimer.stop()
 			$CollisionShape2D.set_deferred("disabled", true)
+			Globals.points += points
 			get_tree().create_timer(1).connect("timeout", self, "_on_particles_finished")
 		else:
 			emit_signal("player_die", self)
@@ -226,7 +252,7 @@ func _on_enemyshoottimer_timeout() -> void:
 		ENEMY_TYPES.BASIC:
 			bullet_target = target.global_position + Vector2(rng.randi_range(-20, 20), rng.randi_range(-20, 20))
 			emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 16, Color(0.988235, 0.27451, 0.27451))
-		ENEMY_TYPES.DRUNK:
+		ENEMY_TYPES.DODGER:
 			bullet_target = Vector2(rng.randi_range(0, 256), rng.randi_range(0, 150))
 			emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 16, Color(0.988235, 0.27451, 0.27451))
 		ENEMY_TYPES.SHOOTER:

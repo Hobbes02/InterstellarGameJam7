@@ -93,4 +93,13 @@ margin_right = 58.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 11 )
 
+[node name="pointslabel" type="Label" parent="." index="11"]
+margin_left = 186.0
+margin_top = 3.0
+margin_right = 252.0
+margin_bottom = 17.0
+custom_fonts/font = SubResource( 11 )
+text = "0"
+align = 2
+
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]

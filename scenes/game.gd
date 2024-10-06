@@ -15,6 +15,7 @@ onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
 onready var weaponlabel: Label = $weaponlabel
 onready var camera: Camera2D = $camera
+onready var pointslabel: Label = $pointslabel
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -30,6 +31,9 @@ func _ready() -> void:
 	
 	$deathlabel.hide()
 	
+	Globals.points = 0
+	pointslabel.show()
+	
 	if player.current_possessing_node != null:
 		player.current_possessing_node.is_player_controlling = true
 		player.current_possessing_node.target = enemy_target
@@ -38,6 +42,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	pointslabel.text = str(Globals.points)
 	if enemies.get_child_count() < 2 and !Globals.dead:
 		spawn_enemy()
 	if Input.is_action_just_pressed("elevate"):
@@ -63,8 +68,8 @@ func _process(delta: float) -> void:
 		weaponlabel.text = player.current_possessing_node.weapon_type
 	
 	if Input.is_action_pressed("elevate"):
-		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
-		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 0.05)
+		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
+		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
 		if player.current_hovering_enemy != null:
 			overlay.start_color = lerp(
 				overlay.start_color,
@@ -78,8 +83,8 @@ func _process(delta: float) -> void:
 				10.0 * delta
 			)
 	else:
-		overlay.modulate.a = lerp(overlay.modulate.a, 0.0, 0.05)
-		Globals.speed_scale = lerp(Globals.speed_scale, 1.0, 0.05)
+		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
+		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
 
 
 func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
@@ -99,6 +104,7 @@ func _on_player_die(node: Node) -> void:
 		b.queue_free()
 	$deathlabel.show()
 	weaponlabel.text = ""
+	pointslabel.hide()
 	
 	Globals.dead = true
 

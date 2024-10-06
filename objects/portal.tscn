@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/art/circle.png" type="Texture" id=1]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 2.0
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 4.0
 
 [node name="portal" type="Area2D"]
 collision_layer = 0
@@ -29,3 +32,10 @@ color = Color( 0.8125, 0.8125, 0.8125, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 2 )

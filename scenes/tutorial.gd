@@ -33,7 +33,7 @@ func _ready() -> void:
 		player.current_possessing_node.target = enemy_target
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	match current_tutorial_step:
 		0:
 			if player.current_possessing_node.velocity != Vector2.ZERO:
@@ -89,15 +89,23 @@ func _process(_delta: float) -> void:
 	if Input.is_action_pressed("elevate"):
 		if current_tutorial_step < 2:
 			return
-		overlay.modulate.a = lerp(overlay.modulate.a, 1, 0.05)
-		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 0.05)
+		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
+		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
 		if player.current_hovering_enemy != null:
-			overlay.start_color = player.current_hovering_enemy.color
+			overlay.start_color = lerp(
+				overlay.start_color,
+				player.current_hovering_enemy.color,
+				10.0 * delta
+			)
 		else:
-			overlay.start_color = Color(0.988235, 0.27451, 0.27451)
+			overlay.start_color = lerp(
+				overlay.start_color,
+				Color(0.988235, 0.27451, 0.27451),
+				10.0 * delta
+			)
 	else:
-		overlay.modulate.a = lerp(overlay.modulate.a, 0.0, 0.05)
-		Globals.speed_scale = lerp(Globals.speed_scale, 1.0, 0.05)
+		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
+		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
 
 
 func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
