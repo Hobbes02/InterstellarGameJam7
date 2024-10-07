@@ -3,9 +3,10 @@ extends Node2D
 const ENEMY = preload("res://objects/enemy.tscn")
 const BULLET = preload("res://objects/bullet.tscn")
 const GRENADE = preload("res://objects/grenade.tscn")
+const TREE = preload("res://objects/tree.tscn")
 
 var enemy_spawn_rate: int = 5
-var enemy_spawn_increase_rate: int = 8
+var enemy_spawn_increase_rate: int = 4
 
 var has_game_started = false
 
@@ -173,3 +174,12 @@ func _on_enemyspawntimer_timeout() -> void:
 	enemyspawntimer.wait_time = 60.0 / enemy_spawn_rate
 	spawn_enemy()
 	enemyspawntimer.start()
+
+
+func _on_treetimer_timeout() -> void:
+	var tree = TREE.instance()
+	bullets.add_child(tree)
+	tree.global_position = Vector2(
+		rng.randi_range(20, 236), 
+		rng.randi_range(20, 130)
+	)

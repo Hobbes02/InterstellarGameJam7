@@ -341,13 +341,18 @@ color = Color( 0.176471, 0.176471, 0.176471, 1 )
 [node name="enemyspawntimer" type="Timer" parent="." index="3"]
 wait_time = 60.0
 
-[node name="overlay" parent="." index="4" instance=ExtResource( 4 )]
+[node name="treetimer" type="Timer" parent="." index="4"]
+wait_time = 100.0
+one_shot = true
+autostart = true
+
+[node name="overlay" parent="." index="5" instance=ExtResource( 4 )]
 modulate = Color( 1, 1, 1, 0 )
 
-[node name="player" parent="." index="7" instance=ExtResource( 3 )]
+[node name="player" parent="." index="8" instance=ExtResource( 3 )]
 position = Vector2( 128, 75 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." index="8"]
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="9"]
 collision_layer = 0
 collision_mask = 30
 
@@ -367,7 +372,7 @@ shape = SubResource( 2 )
 position = Vector2( 128, 159 )
 shape = SubResource( 2 )
 
-[node name="deathlabel" type="Label" parent="." index="9"]
+[node name="deathlabel" type="Label" parent="." index="10"]
 visible = false
 margin_left = 61.0
 margin_top = 32.0
@@ -398,14 +403,14 @@ text = "space to
 replay"
 align = 1
 
-[node name="weaponlabel" type="Label" parent="." index="10"]
+[node name="weaponlabel" type="Label" parent="." index="11"]
 margin_left = 4.0
 margin_top = 2.0
 margin_right = 58.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 11 )
 
-[node name="pointslabel" type="Label" parent="." index="11"]
+[node name="pointslabel" type="Label" parent="." index="12"]
 margin_left = 186.0
 margin_top = 3.0
 margin_right = 252.0
@@ -414,7 +419,7 @@ custom_fonts/font = SubResource( 11 )
 text = "0"
 align = 2
 
-[node name="fade" type="ColorRect" parent="." index="12"]
+[node name="fade" type="ColorRect" parent="." index="13"]
 modulate = Color( 1, 1, 1, 0 )
 margin_left = -14.0
 margin_top = -13.0
@@ -422,7 +427,7 @@ margin_right = 271.0
 margin_bottom = 159.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="13"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
 autoplay = "start"
 anims/RESET = SubResource( 13 )
 anims/start = SubResource( 12 )
@@ -473,8 +478,9 @@ align = 1
 [node name="count" type="AudioStreamPlayer" parent="AnimationPlayer" index="1"]
 stream = ExtResource( 7 )
 
-[node name="music" type="AudioStreamPlayer" parent="." index="14"]
+[node name="music" type="AudioStreamPlayer" parent="." index="15"]
 stream = ExtResource( 6 )
 volume_db = -80.0
 
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]
+[connection signal="timeout" from="treetimer" to="." method="_on_treetimer_timeout"]
