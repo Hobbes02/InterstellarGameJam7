@@ -15,6 +15,10 @@ func _ready() -> void:
 	set_physics_process(false)
 
 
+func _process(delta: float) -> void:
+	explosiontimer.paused = Globals.elevated
+
+
 func _physics_process(delta: float) -> void:
 	velocity = lerp(velocity, Vector2.ZERO, 5.0 * delta)
 	

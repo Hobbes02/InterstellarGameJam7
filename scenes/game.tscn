@@ -345,7 +345,6 @@ wait_time = 60.0
 modulate = Color( 1, 1, 1, 0 )
 
 [node name="player" parent="." index="7" instance=ExtResource( 3 )]
-visible = false
 position = Vector2( 128, 75 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." index="8"]

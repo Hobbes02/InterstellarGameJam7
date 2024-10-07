@@ -37,6 +37,8 @@ func start() -> void:
 	
 	$deathlabel.hide()
 	
+	dodger_amount = 0
+	
 	Globals.points = 0
 	pointslabel.show()
 	
@@ -72,6 +74,7 @@ func _process(delta: float) -> void:
 			player.current_possessing_node = player.current_hovering_enemy
 		elif player.current_possessing_node != null:
 			player.current_possessing_node.is_player_controlling = true
+		if player.current_possessing_node != null:
 			weaponlabel.text = player.current_possessing_node.weapon_type
 	
 	if Input.is_action_pressed("elevate"):
@@ -83,6 +86,7 @@ func _process(delta: float) -> void:
 				player.current_hovering_enemy.color,
 				10.0 * delta
 			)
+			weaponlabel.text = player.current_hovering_enemy.weapon_type
 		else:
 			overlay.start_color = lerp(
 				overlay.start_color,
