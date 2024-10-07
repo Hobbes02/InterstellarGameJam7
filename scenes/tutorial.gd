@@ -152,6 +152,8 @@ func _on_game_body_entered(body: Node) -> void:
 	if not current_tutorial_step in [-1, 4]:
 		return
 	
+	player.current_possessing_node.hide()
+	
 	$animations.play("fadeout")
 	yield($animations, "animation_finished")
 	SceneManager.emit_signal("change_scene", "res://scenes/game.tscn")

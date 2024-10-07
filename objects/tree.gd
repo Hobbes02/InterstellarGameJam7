@@ -11,6 +11,7 @@ func take_damage() -> void:
 	trunk.hide()
 	tree.hide()
 	deathparticles.emitting = true
+	Globals.points += 50
 	get_tree().create_timer(1.8).connect("timeout", self, "_on_death")
 
 

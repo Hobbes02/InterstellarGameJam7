@@ -481,6 +481,7 @@ stream = ExtResource( 7 )
 [node name="music" type="AudioStreamPlayer" parent="." index="15"]
 stream = ExtResource( 6 )
 volume_db = -80.0
+bus = "Music"
 
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]
 [connection signal="timeout" from="treetimer" to="." method="_on_treetimer_timeout"]
