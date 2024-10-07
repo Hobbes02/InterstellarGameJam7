@@ -7,6 +7,10 @@ const GRENADE = preload("res://objects/grenade.tscn")
 var enemy_spawn_rate: int = 5
 var enemy_spawn_increase_rate: int = 8
 
+var has_game_started = false
+
+var dodger_amount: int = 0
+
 onready var enemies: Node2D = $enemies
 onready var bullets: Node2D = $bullets
 onready var background: ColorRect = $background
@@ -17,6 +21,8 @@ onready var enemy_target: Node = player
 onready var weaponlabel: Label = $weaponlabel
 onready var camera: Camera2D = $camera
 onready var pointslabel: Label = $pointslabel
+onready var animation_player: AnimationPlayer = $AnimationPlayer
+onready var highscorelabel: Label = $deathlabel/highscore
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -26,7 +32,6 @@ func start() -> void:
 	enemyspawntimer.wait_time = 60.0 / enemy_spawn_rate
 	enemy_spawn_rate = 5
 	enemyspawntimer.start()
-	spawn_enemy()
 	
 	player.current_possessing_node = spawn_enemy(Vector2(128, 75), Enemy.ENEMY_TYPES.BASIC)
 	
@@ -40,16 +45,18 @@ func start() -> void:
 		player.current_possessing_node.target = enemy_target
 	
 	weaponlabel.text = player.current_possessing_node.weapon_type
+	
+	has_game_started = true
 
 
 func _process(delta: float) -> void:
 	pointslabel.text = str(Globals.points)
-	if enemies.get_child_count() < 2 and !Globals.dead:
+	if enemies.get_child_count() < 2 and !Globals.dead and has_game_started:
 		spawn_enemy()
 	if Input.is_action_just_pressed("elevate"):
 		if Globals.dead:
 			Globals.dead = false
-			start()
+			animation_player.play("start")
 			return
 		Globals.elevated = true
 		enemyspawntimer.paused = true
@@ -65,8 +72,7 @@ func _process(delta: float) -> void:
 			player.current_possessing_node = player.current_hovering_enemy
 		elif player.current_possessing_node != null:
 			player.current_possessing_node.is_player_controlling = true
-		
-		weaponlabel.text = player.current_possessing_node.weapon_type
+			weaponlabel.text = player.current_possessing_node.weapon_type
 	
 	if Input.is_action_pressed("elevate"):
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
@@ -111,10 +117,18 @@ func _on_player_die(node: Node) -> void:
 	for b in bullets.get_children():
 		b.queue_free()
 	$deathlabel.show()
+	highscorelabel.text = "Score: " + str(Globals.points)
 	weaponlabel.text = ""
 	pointslabel.hide()
 	
+	Globals.points = 0
 	Globals.dead = true
+	has_game_started = false
+
+
+func _on_enemy_die(enemy_type: int) -> void:
+	if enemy_type == Enemy.ENEMY_TYPES.DODGER:
+		dodger_amount -= 1
 
 
 func spawn_enemy(spawn_location: Vector2 = Vector2.ZERO, enemy_type: int = -1) -> Node:
@@ -134,6 +148,11 @@ func spawn_enemy(spawn_location: Vector2 = Vector2.ZERO, enemy_type: int = -1) -
 	enemy.connect("shoot_bullet", self, "_on_shoot_bullet")
 	enemy.connect("throw_grenade", self, "_on_throw_grenade")
 	enemy.connect("player_die", self, "_on_player_die")
+	enemy.connect("enemy_die", self, "_on_enemy_die")
+	if enemy_type == -1:
+		enemy_type = rng.randi_range(0, 2 if dodger_amount < 2 else 1)
+	if enemy_type == Enemy.ENEMY_TYPES.DODGER:
+		dodger_amount += 1
 	enemy.enemy_type = enemy_type
 	enemies.add_child(enemy)
 	enemy.global_position = spawn_location

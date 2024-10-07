@@ -19,8 +19,8 @@ void fragment() {
 
 [sub_resource type="Gradient" id=8]
 interpolation_mode = 1
-offsets = PoolRealArray( 0, 0.567742 )
-colors = PoolColorArray( 0.988235, 0.27451, 0.27451, 1, 0.929412, 0.901961, 0.207843, 1 )
+offsets = PoolRealArray( 0, 0.511013 )
+colors = PoolColorArray( 0.988235, 0.27451, 0.27451, 1, 0.8125, 0.8125, 0.8125, 1 )
 
 [sub_resource type="GradientTexture" id=9]
 gradient = SubResource( 8 )

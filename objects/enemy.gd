@@ -67,6 +67,7 @@ onready var enemy_stats: Dictionary = {
 signal shoot_bullet(from, speed, target, mask, color)
 signal throw_grenade(from, target, mask, color)
 signal player_die(node)
+signal enemy_die(enemy_type)
 
 var velocity: Vector2
 
@@ -111,10 +112,6 @@ onready var reload: AudioStreamPlayer = $reload
 
 
 func _ready() -> void:
-	rng.randomize()
-	if enemy_type == -1:
-		enemy_type = rng.randi_range(0, 2)
-	
 	# set up stats:
 	
 	var e = enemy_stats[enemy_type]
@@ -140,6 +137,7 @@ func _ready() -> void:
 	
 	if enemy_type == ENEMY_TYPES.DODGER:
 		shoot.stream = preload("res://assets/sfx/throw.wav")
+		enemyshoottimer.wait_time = 12
 
 
 func _physics_process(delta: float) -> void:
@@ -229,6 +227,7 @@ func take_damage() -> void:
 			enemyshoottimer.stop()
 			$CollisionShape2D.set_deferred("disabled", true)
 			Globals.points += points
+			emit_signal("enemy_die", enemy_type)
 			get_tree().create_timer(1).connect("timeout", self, "_on_particles_finished")
 		else:
 			emit_signal("player_die", self)
