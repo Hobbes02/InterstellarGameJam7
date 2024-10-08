@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/game.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/fonts/vermin_vibes_1989/Vermin Vibes 1989.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/music/main.mp3" type="AudioStream" id=6]
 [ext_resource path="res://assets/sfx/count.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/music/main_filtered.mp3" type="AudioStream" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
@@ -169,6 +170,30 @@ tracks/11/keys = {
 "update": 0,
 "values": [ true ]
 }
+tracks/12/type = "value"
+tracks/12/path = NodePath("elevatedmusic:playing")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("elevatedmusic:volume_db")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -80.0 ]
+}
 
 [sub_resource type="Animation" id=12]
 resource_name = "start"
@@ -318,6 +343,30 @@ tracks/11/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("elevatedmusic:playing")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("elevatedmusic:volume_db")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -80.0, -80.0 ]
 }
 
 [sub_resource type="DynamicFont" id=14]
@@ -489,6 +538,11 @@ stream = ExtResource( 7 )
 
 [node name="music" type="AudioStreamPlayer" parent="." index="15"]
 stream = ExtResource( 6 )
+volume_db = -80.0
+bus = "Music"
+
+[node name="elevatedmusic" type="AudioStreamPlayer" parent="." index="16"]
+stream = ExtResource( 8 )
 volume_db = -80.0
 bus = "Music"
 

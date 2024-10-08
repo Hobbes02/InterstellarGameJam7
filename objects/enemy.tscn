@@ -161,6 +161,7 @@ bus = "SFX"
 
 [node name="reload" type="AudioStreamPlayer" parent="."]
 volume_db = 10.0
+bus = "SFX"
 
 [connection signal="timeout" from="enemyshoottimer" to="." method="_on_enemyshoottimer_timeout"]
 [connection signal="timeout" from="reloadtimer" to="." method="_on_reloadtimer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://objects/portal.tscn" type="PackedScene" id=5]
 [ext_resource path="res://objects/elevated.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/music/tutorial.mp3" type="AudioStream" id=7]
+[ext_resource path="res://assets/music/tutorial_filtered.mp3" type="AudioStream" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
@@ -211,11 +212,17 @@ stream = ExtResource( 7 )
 autoplay = true
 bus = "Music"
 
-[node name="animations" type="AnimationPlayer" parent="." index="13"]
+[node name="elevatedmusic" type="AudioStreamPlayer" parent="." index="13"]
+stream = ExtResource( 8 )
+volume_db = -80.0
+autoplay = true
+bus = "Music"
+
+[node name="animations" type="AnimationPlayer" parent="." index="14"]
 anims/RESET = SubResource( 5 )
 anims/fadeout = SubResource( 4 )
 
-[node name="fade" type="ColorRect" parent="." index="14"]
+[node name="fade" type="ColorRect" parent="." index="15"]
 modulate = Color( 1, 1, 1, 0 )
 margin_left = -15.0
 margin_top = -12.0

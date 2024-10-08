@@ -25,6 +25,8 @@ onready var pointslabel: Label = $pointslabel
 onready var animation_player: AnimationPlayer = $AnimationPlayer
 onready var scorelabel: Label = $deathlabel/score
 onready var highscorelabel: Label = $deathlabel/highscore
+onready var music: AudioStreamPlayer = $music
+onready var elevatedmusic: AudioStreamPlayer = $elevatedmusic
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -65,13 +67,11 @@ func _process(delta: float) -> void:
 	if enemies.get_child_count() < 2 and !Globals.dead and has_game_started:
 		spawn_enemy()
 	if Input.is_action_just_pressed("elevate") and !Globals.dead:
-		AudioServer.set_bus_effect_enabled(2, 0, true)
 		Globals.elevated = true
 		enemyspawntimer.paused = true
 		for e in enemies.get_children():
 			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
-		AudioServer.set_bus_effect_enabled(2, 0, false)
 		Globals.elevated = false
 		enemyspawntimer.paused = false
 		for e in enemies.get_children():
@@ -87,7 +87,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("elevate") and !Globals.dead:
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
-		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 2000, 100.0 * delta)
+		music.volume_db = -80
+		elevatedmusic.volume_db = 0
 		if player.current_hovering_enemy != null:
 			overlay.start_color = lerp(
 				overlay.start_color,
@@ -104,7 +105,8 @@ func _process(delta: float) -> void:
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
-		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 6000, 100.0 * delta)
+		music.volume_db = 0
+		elevatedmusic.volume_db = -80
 
 
 func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:

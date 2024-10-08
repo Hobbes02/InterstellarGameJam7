@@ -10,6 +10,8 @@ var current_tutorial_step: int = -1
 
 var tutorial_enemy: Node = null
 
+var fading_out: bool = false
+
 onready var enemies: Node2D = $enemies
 onready var bullets: Node2D = $bullets
 onready var background: ColorRect = $background
@@ -17,6 +19,8 @@ onready var overlay: TextureRect = $overlay
 onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
 onready var tutorialnodes: Node2D = $tutorialnodes
+onready var music: AudioStreamPlayer = $music
+onready var elevatedmusic: AudioStreamPlayer = $elevatedmusic
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -67,7 +71,6 @@ func _process(delta: float) -> void:
 				current_tutorial_step = 4
 	
 	if Input.is_action_just_pressed("elevate"):
-		AudioServer.set_bus_effect_enabled(2, 0, true)
 		if current_tutorial_step < 2:
 			return
 		if Globals.dead:
@@ -78,7 +81,6 @@ func _process(delta: float) -> void:
 		for e in enemies.get_children():
 			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
-		AudioServer.set_bus_effect_enabled(2, 0, false)
 		Globals.elevated = false
 		for e in enemies.get_children():
 			e.is_player_controlling = false
@@ -88,12 +90,13 @@ func _process(delta: float) -> void:
 		elif player.current_possessing_node != null:
 			player.current_possessing_node.is_player_controlling = true
 	
-	if Input.is_action_pressed("elevate"):
+	if Input.is_action_pressed("elevate") and !fading_out:
 		if current_tutorial_step < 2:
 			return
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
-		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 2000, 100.0 * delta)
+		music.volume_db = -80
+		elevatedmusic.volume_db = 0
 		if player.current_hovering_enemy != null:
 			overlay.start_color = lerp(
 				overlay.start_color,
@@ -109,7 +112,10 @@ func _process(delta: float) -> void:
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
-		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 6000, 100.0 * delta)
+		if !fading_out:
+			music.volume_db = 0
+			elevatedmusic.volume_db = -80
+
 
 
 func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
@@ -158,6 +164,9 @@ func _on_game_body_entered(body: Node) -> void:
 	
 	player.current_possessing_node.hide()
 	
+	fading_out = true
+	music.volume_db = 0
+	elevatedmusic.volume_db = -80
 	$animations.play("fadeout")
 	yield($animations, "animation_finished")
 	SceneManager.emit_signal("change_scene", "res://scenes/game.tscn")
