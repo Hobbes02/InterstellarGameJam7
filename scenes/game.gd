@@ -23,6 +23,7 @@ onready var weaponlabel: Label = $weaponlabel
 onready var camera: Camera2D = $camera
 onready var pointslabel: Label = $pointslabel
 onready var animation_player: AnimationPlayer = $AnimationPlayer
+onready var scorelabel: Label = $deathlabel/score
 onready var highscorelabel: Label = $deathlabel/highscore
 
 onready var rng = RandomNumberGenerator.new()
@@ -52,24 +53,25 @@ func start() -> void:
 	has_game_started = true
 
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("restart") and Globals.dead:
+		Globals.dead = false
+		animation_player.play("start")
+		return
+
+
 func _process(delta: float) -> void:
 	pointslabel.text = str(Globals.points)
 	if enemies.get_child_count() < 2 and !Globals.dead and has_game_started:
 		spawn_enemy()
-	if Input.is_action_just_pressed("elevate"):
+	if Input.is_action_just_pressed("elevate") and !Globals.dead:
 		AudioServer.set_bus_effect_enabled(2, 0, true)
-		AudioServer.set_bus_effect_enabled(2, 1, true)
-		if Globals.dead:
-			Globals.dead = false
-			animation_player.play("start")
-			return
 		Globals.elevated = true
 		enemyspawntimer.paused = true
 		for e in enemies.get_children():
 			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
 		AudioServer.set_bus_effect_enabled(2, 0, false)
-		AudioServer.set_bus_effect_enabled(2, 1, false)
 		Globals.elevated = false
 		enemyspawntimer.paused = false
 		for e in enemies.get_children():
@@ -82,7 +84,7 @@ func _process(delta: float) -> void:
 		if player.current_possessing_node != null:
 			weaponlabel.text = player.current_possessing_node.weapon_type
 	
-	if Input.is_action_pressed("elevate"):
+	if Input.is_action_pressed("elevate") and !Globals.dead:
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
 		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 2000, 100.0 * delta)
@@ -128,7 +130,11 @@ func _on_player_die(node: Node) -> void:
 	for b in bullets.get_children():
 		b.queue_free()
 	$deathlabel.show()
-	highscorelabel.text = "Score: " + str(Globals.points)
+	
+	if Globals.points > Globals.highscore:
+		Globals.highscore = Globals.points
+	scorelabel.text = "Score: " + str(Globals.points)
+	highscorelabel.text = "Highscore: " + str(Globals.highscore)
 	weaponlabel.text = ""
 	pointslabel.hide()
 	

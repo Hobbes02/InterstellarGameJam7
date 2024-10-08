@@ -8,6 +8,7 @@ var elevated: bool = false
 var dead: bool = false
 
 var points: int = 0
+var highscore: int = 0
 
 var music_muted: bool = false
 var sfx_muted: bool = false

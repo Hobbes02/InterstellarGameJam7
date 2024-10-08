@@ -382,7 +382,7 @@ custom_colors/font_color = Color( 0.505882, 0.188235, 0.188235, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "DEATH"
 
-[node name="highscore" type="Label" parent="deathlabel" index="0"]
+[node name="score" type="Label" parent="deathlabel" index="0"]
 margin_left = -61.0
 margin_top = 51.0
 margin_right = 195.0
@@ -392,15 +392,24 @@ custom_fonts/font = SubResource( 4 )
 text = "score: sdsfsdf"
 align = 1
 
-[node name="deathlabel2" type="Label" parent="deathlabel" index="1"]
-margin_left = -1.0
-margin_top = 81.0
-margin_right = 134.0
-margin_bottom = 124.0
+[node name="highscore" type="Label" parent="deathlabel" index="1"]
+margin_left = -61.0
+margin_top = 67.0
+margin_right = 195.0
+margin_bottom = 81.0
 custom_colors/font_color = Color( 0.505882, 0.188235, 0.188235, 1 )
 custom_fonts/font = SubResource( 4 )
-text = "space to
-replay"
+text = "highscore: stdfgdfg"
+align = 1
+
+[node name="restartlabel" type="Label" parent="deathlabel" index="2"]
+margin_left = -1.0
+margin_top = 99.0
+margin_right = 134.0
+margin_bottom = 113.0
+custom_colors/font_color = Color( 0.457778, 0.457778, 0.457778, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "r to restart"
 align = 1
 
 [node name="weaponlabel" type="Label" parent="." index="11"]

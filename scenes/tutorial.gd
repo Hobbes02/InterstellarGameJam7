@@ -67,6 +67,7 @@ func _process(delta: float) -> void:
 				current_tutorial_step = 4
 	
 	if Input.is_action_just_pressed("elevate"):
+		AudioServer.set_bus_effect_enabled(2, 0, true)
 		if current_tutorial_step < 2:
 			return
 		if Globals.dead:
@@ -77,6 +78,7 @@ func _process(delta: float) -> void:
 		for e in enemies.get_children():
 			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
+		AudioServer.set_bus_effect_enabled(2, 0, false)
 		Globals.elevated = false
 		for e in enemies.get_children():
 			e.is_player_controlling = false
@@ -91,6 +93,7 @@ func _process(delta: float) -> void:
 			return
 		overlay.modulate.a = lerp(overlay.modulate.a, 1, 8.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 0.2, 8.0 * delta)
+		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 2000, 100.0 * delta)
 		if player.current_hovering_enemy != null:
 			overlay.start_color = lerp(
 				overlay.start_color,
@@ -106,6 +109,7 @@ func _process(delta: float) -> void:
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
+		AudioServer.get_bus_effect(2, 0).cutoff_hz = lerp(AudioServer.get_bus_effect(2, 0).cutoff_hz, 6000, 100.0 * delta)
 
 
 func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
