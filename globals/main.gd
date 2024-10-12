@@ -18,9 +18,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	fpslabel.text = str(Engine.get_frames_per_second())
-	cursor.global_position = get_global_mouse_position() / 4
 	if viewport.is_inside_tree():
 		SceneManager.mouse_position = (get_global_mouse_position() / 4) - viewport.canvas_transform.origin
+	cursor.global_position = SceneManager.mouse_position
 
 
 func _input(event: InputEvent) -> void:

@@ -57,8 +57,9 @@ linear_accel = -200.0
 scale_amount = 2.0
 color = Color( 0.8125, 0.8125, 0.8125, 1 )
 
-[node name="explode" type="AudioStreamPlayer" parent="."]
+[node name="explode" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 4 )
+attenuation = 8.0
 bus = "SFX"
 
 [connection signal="timeout" from="explosiontimer" to="." method="_on_explosiontimer_timeout"]

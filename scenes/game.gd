@@ -16,17 +16,17 @@ onready var enemies: Node2D = $enemies
 onready var bullets: Node2D = $bullets
 onready var background: ColorRect = $background
 onready var enemyspawntimer: Timer = $enemyspawntimer
-onready var overlay: TextureRect = $overlay
+onready var overlay: TextureRect = $HUD/overlay
 onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
-onready var weaponlabel: Label = $weaponlabel
-onready var camera: Camera2D = $camera
-onready var pointslabel: Label = $pointslabel
-onready var animation_player: AnimationPlayer = $AnimationPlayer
-onready var scorelabel: Label = $deathlabel/score
-onready var highscorelabel: Label = $deathlabel/highscore
+onready var weaponlabel: Label = $HUD/weaponlabel
+onready var pointslabel: Label = $HUD/pointslabel
+onready var animation_player: AnimationPlayer = $HUD/AnimationPlayer
+onready var scorelabel: Label = $HUD/deathlabel/score
+onready var highscorelabel: Label = $HUD/deathlabel/highscore
 onready var music: AudioStreamPlayer = $music
 onready var elevatedmusic: AudioStreamPlayer = $elevatedmusic
+onready var hud: Node2D = $HUD
 
 onready var rng = RandomNumberGenerator.new()
 
@@ -39,7 +39,7 @@ func start() -> void:
 	
 	player.current_possessing_node = spawn_enemy(Vector2(128, 75), Enemy.ENEMY_TYPES.BASIC)
 	
-	$deathlabel.hide()
+	$HUD/deathlabel.hide()
 	
 	dodger_amount = 0
 	
@@ -102,6 +102,7 @@ func _process(delta: float) -> void:
 				Color(0.988235, 0.27451, 0.27451),
 				10.0 * delta
 			)
+			weaponlabel.text = ""
 	else:
 		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
@@ -131,7 +132,7 @@ func _on_player_die(node: Node) -> void:
 		e.queue_free()
 	for b in bullets.get_children():
 		b.queue_free()
-	$deathlabel.show()
+	$HUD/deathlabel.show()
 	
 	if Globals.points > Globals.highscore:
 		Globals.highscore = Globals.points

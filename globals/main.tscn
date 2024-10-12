@@ -24,6 +24,7 @@ size = Vector2( 256, 150 )
 handle_input_locally = false
 usage = 0
 render_target_update_mode = 3
+audio_listener_enable_2d = true
 
 [node name="cursor" type="Polygon2D" parent="ViewportContainer/Viewport"]
 z_index = 4096

@@ -207,22 +207,22 @@ text = "wasd to move
 here too"
 align = 1
 
-[node name="music" type="AudioStreamPlayer" parent="." index="12"]
+[node name="music" type="AudioStreamPlayer" parent="." index="11"]
 stream = ExtResource( 7 )
 autoplay = true
 bus = "Music"
 
-[node name="elevatedmusic" type="AudioStreamPlayer" parent="." index="13"]
+[node name="elevatedmusic" type="AudioStreamPlayer" parent="." index="12"]
 stream = ExtResource( 8 )
 volume_db = -80.0
 autoplay = true
 bus = "Music"
 
-[node name="animations" type="AnimationPlayer" parent="." index="14"]
+[node name="animations" type="AnimationPlayer" parent="." index="13"]
 anims/RESET = SubResource( 5 )
 anims/fadeout = SubResource( 4 )
 
-[node name="fade" type="ColorRect" parent="." index="15"]
+[node name="fade" type="ColorRect" parent="." index="14"]
 modulate = Color( 1, 1, 1, 0 )
 margin_left = -15.0
 margin_top = -12.0

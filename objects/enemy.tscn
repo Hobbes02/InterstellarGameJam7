@@ -150,16 +150,20 @@ scale_amount = 2.0
 scale_amount_random = 0.6
 color = Color( 0.8125, 0.8125, 0.8125, 1 )
 
-[node name="shoot" type="AudioStreamPlayer" parent="."]
+[node name="shoot" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )
+attenuation = 8.0
 bus = "SFX"
 
-[node name="hit" type="AudioStreamPlayer" parent="."]
+[node name="hit" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 6 )
+attenuation = 8.0
 bus = "SFX"
+area_mask = 31
 
-[node name="throw" type="AudioStreamPlayer" parent="."]
+[node name="throw" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 4 )
+attenuation = 8.0
 bus = "SFX"
 
 [node name="reload" type="AudioStreamPlayer" parent="."]

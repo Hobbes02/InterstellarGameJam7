@@ -110,9 +110,9 @@ onready var enemyshoottimer: Timer = $enemyshoottimer
 onready var healthbar: ProgressBar = $indicators/healthbar
 onready var deathparticles: CPUParticles2D = $deathparticles
 onready var damageparticles: CPUParticles2D = $damageparticles
-onready var shoot: AudioStreamPlayer = $shoot
-onready var hit: AudioStreamPlayer = $hit
-onready var throw: AudioStreamPlayer = $throw
+onready var shoot: AudioStreamPlayer2D = $shoot
+onready var hit: AudioStreamPlayer2D = $hit
+onready var throw: AudioStreamPlayer2D = $throw
 onready var reload: AudioStreamPlayer = $reload
 
 
