@@ -17,6 +17,7 @@ onready var enemy_stats: Dictionary = {
 		"bullet_speed": 60, 
 		"bullets_per_mag": 6, 
 		"max_health": 4, 
+		"cooldown_time": 0.2, 
 		"reload_time": 1.4, 
 		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
 		"weapon_type": "pistol", 
@@ -30,6 +31,7 @@ onready var enemy_stats: Dictionary = {
 		"bullet_speed": 80, 
 		"bullets_per_mag": 9, 
 		"max_health": 4, 
+		"cooldown_time": 0.1, 
 		"reload_time": 1.8, 
 		"reload_sound": preload("res://assets/sfx/shotgun_reload.mp3"), 
 		"weapon_type": "shotgun", 
@@ -39,10 +41,11 @@ onready var enemy_stats: Dictionary = {
 		"node": $dodger, 
 		"line": $dodger/Line2D, 
 		"color": $dodger/circle.modulate, 
-		"speed": 12, 
+		"speed": 11, 
 		"bullet_speed": 55, 
 		"bullets_per_mag": 1, 
 		"max_health": 5, 
+		"cooldown_time": 0.0, 
 		"reload_time": 1.0, 
 		"reload_sound": null, 
 		"weapon_type": "grenade", 
@@ -56,6 +59,7 @@ onready var enemy_stats: Dictionary = {
 		"bullet_speed": 60, 
 		"bullets_per_mag": 2, 
 		"max_health": 3, 
+		"cooldown_time": 0.2, 
 		"reload_time": 1.4, 
 		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
 		"weapon_type": "pistol", 
@@ -99,6 +103,7 @@ onready var line_2d: Line2D
 onready var selected: Sprite = $selected
 onready var rng = RandomNumberGenerator.new()
 onready var reloadtimer: Timer = $reloadtimer
+onready var cooldowntimer: Timer = $cooldowntimer
 onready var reloadindicator: ProgressBar = $indicators/reloadindicator
 onready var indicators: Node2D = $indicators
 onready var enemyshoottimer: Timer = $enemyshoottimer
@@ -129,6 +134,7 @@ func _ready() -> void:
 	max_health = e.max_health
 	health = max_health
 	healthbar.max_value = max_health
+	cooldowntimer.wait_time = e.cooldown_time if e.cooldown_time > 0 else 1
 	reloadtimer.wait_time = e.reload_time
 	enemyshoottimer.wait_time = e.reload_time * 4
 	reload.stream = e.reload_sound
@@ -172,9 +178,13 @@ func _physics_process(delta: float) -> void:
 					reloadtimer.start()
 					reloadindicator.show()
 					reload.play()
+			elif !cooldowntimer.is_stopped():
+				return
 			else:
 				shoot.volume_db = 0
 				shoot.play()
+				if enemy_stats[enemy_type].cooldown_time > 0:
+					cooldowntimer.start()
 				var bullet_target: Vector2 = SceneManager.mouse_position
 				if enemy_type == ENEMY_TYPES.DODGER:
 					emit_signal("throw_grenade", global_position, bullet_target, 8, Color(1, 0.658824, 0.172549))

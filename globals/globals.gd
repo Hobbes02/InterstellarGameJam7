@@ -21,3 +21,11 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("mute_sfx"):
 		sfx_muted = !sfx_muted
 		AudioServer.set_bus_mute(1, sfx_muted)
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_WM_FOCUS_OUT:
+			get_tree().paused = true
+		NOTIFICATION_WM_FOCUS_IN:
+			get_tree().paused = false

@@ -194,6 +194,18 @@ tracks/13/keys = {
 "update": 0,
 "values": [ -80.0 ]
 }
+tracks/14/type = "value"
+tracks/14/path = NodePath("AnimationPlayer/count:pitch_scale")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
 
 [sub_resource type="Animation" id=12]
 resource_name = "start"
@@ -303,10 +315,10 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 2, 3, 4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 2, 3, 4, 5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ true, true, true ]
+"values": [ true, true, true, true ]
 }
 tracks/9/type = "value"
 tracks/9/path = NodePath("deathlabel:visible")
@@ -367,6 +379,18 @@ tracks/13/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ -80.0, -80.0 ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("AnimationPlayer/count:pitch_scale")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0, 4.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 1.0, 1.04 ]
 }
 
 [sub_resource type="DynamicFont" id=14]
@@ -535,6 +559,7 @@ align = 1
 
 [node name="count" type="AudioStreamPlayer" parent="AnimationPlayer" index="1"]
 stream = ExtResource( 7 )
+bus = "SFX"
 
 [node name="music" type="AudioStreamPlayer" parent="." index="15"]
 stream = ExtResource( 6 )
@@ -545,6 +570,8 @@ bus = "Music"
 stream = ExtResource( 8 )
 volume_db = -80.0
 bus = "Music"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="17"]
 
 [connection signal="timeout" from="enemyspawntimer" to="." method="_on_enemyspawntimer_timeout"]
 [connection signal="timeout" from="treetimer" to="." method="_on_treetimer_timeout"]

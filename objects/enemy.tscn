@@ -85,6 +85,9 @@ texture = ExtResource( 3 )
 [node name="enemyshoottimer" type="Timer" parent="."]
 autostart = true
 
+[node name="cooldowntimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="reloadtimer" type="Timer" parent="."]
 one_shot = true
 

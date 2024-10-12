@@ -7,6 +7,7 @@ var current_scene_node: Node = null
 onready var viewport: Viewport = $ViewportContainer/Viewport
 onready var fpslabel: Label = $debug/fpslabel
 onready var debug: Control = $debug
+onready var cursor: Polygon2D = $ViewportContainer/Viewport/cursor
 
 
 func _ready() -> void:
@@ -17,6 +18,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	fpslabel.text = str(Engine.get_frames_per_second())
+	cursor.global_position = get_global_mouse_position() / 4
 	if viewport.is_inside_tree():
 		SceneManager.mouse_position = (get_global_mouse_position() / 4) - viewport.canvas_transform.origin
 
@@ -33,3 +35,4 @@ func _on_change_scene_requested(scene_path: String) -> void:
 	
 	current_scene_node = load(scene_path).instance()
 	viewport.call_deferred("add_child", current_scene_node)
+
