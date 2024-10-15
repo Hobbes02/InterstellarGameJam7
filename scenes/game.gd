@@ -79,6 +79,7 @@ func _process(delta: float) -> void:
 		if player.current_hovering_enemy != null:
 			player.current_hovering_enemy.is_player_controlling = true
 			player.current_possessing_node = player.current_hovering_enemy
+			SignalBus.emit_signal("possess")
 		elif player.current_possessing_node != null:
 			player.current_possessing_node.is_player_controlling = true
 		if player.current_possessing_node != null:

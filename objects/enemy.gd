@@ -227,6 +227,9 @@ func take_damage() -> void:
 	
 	damageparticles.emitting = true
 	
+	if is_player_controlling:
+		SignalBus.emit_signal("player_hit")
+	
 	if health <= 0:
 		if !is_player_controlling:
 			$basic.hide()
@@ -267,3 +270,10 @@ func _on_enemyshoottimer_timeout() -> void:
 		ENEMY_TYPES.SHOOTER:
 			for i in [bullet_target, bullet_target + Vector2(40, 40), bullet_target - Vector2(40, 40)]:
 				emit_signal("shoot_bullet", global_position, bullet_speed, i, 16, Color(0.988235, 0.27451, 0.27451))
+
+
+func basic_damage() -> void:
+	$basic/Polygon2D.color = Color(1, 1, 1)
+	yield(get_tree().create_timer(0.2), "timeout")
+	$basic/Polygon2D.color = color
+

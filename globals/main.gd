@@ -8,10 +8,13 @@ onready var viewport: Viewport = $ViewportContainer/Viewport
 onready var fpslabel: Label = $debug/fpslabel
 onready var debug: Control = $debug
 onready var cursor: Polygon2D = $ViewportContainer/Viewport/cursor
+onready var world_environment: WorldEnvironment = $WorldEnvironment
+onready var animations: AnimationPlayer = $animations
 
 
 func _ready() -> void:
 	SceneManager.connect("change_scene", self, "_on_change_scene_requested")
+	SignalBus.connect("possess", self, "_on_possess")
 	_on_change_scene_requested(start_scene)
 	Engine.target_fps = 120
 
@@ -35,4 +38,8 @@ func _on_change_scene_requested(scene_path: String) -> void:
 	
 	current_scene_node = load(scene_path).instance()
 	viewport.call_deferred("add_child", current_scene_node)
+
+
+func _on_possess() -> void:
+	animations.play("possess")
 

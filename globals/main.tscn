@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://globals/main.gd" type="Script" id=1]
 
@@ -7,6 +7,53 @@ background_mode = 4
 glow_enabled = true
 glow_bloom = 0.8
 glow_hdr_threshold = 0.0
+adjustment_enabled = true
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/chromaticabberation:material:shader_param/offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "possess"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/chromaticabberation:material:shader_param/offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 4.0, 0.0 ]
+}
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform float offset = 1.0;
+
+void fragment() {
+	vec4 green_channel = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 red_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x + (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
+	vec4 blue_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x - (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
+	COLOR = vec4(red_channel.r, green_channel.g, blue_channel.b, 1);
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/offset = 0.0
 
 [node name="main" type="Control"]
 anchor_right = 1.0
@@ -43,3 +90,19 @@ text = "text"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
+
+[node name="animations" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 4 )
+anims/possess = SubResource( 5 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="chromaticabberation" type="ColorRect" parent="CanvasLayer"]
+material = SubResource( 3 )
+anchor_right = 0.958008
+anchor_bottom = 0.915
+margin_right = 43.0
+margin_bottom = 51.0
+__meta__ = {
+"_edit_use_anchors_": true
+}

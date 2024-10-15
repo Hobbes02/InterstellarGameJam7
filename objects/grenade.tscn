@@ -42,7 +42,7 @@ texture = ExtResource( 3 )
 [node name="explosiontimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="cloudparticles" type="CPUParticles2D" parent="."]
 emitting = false
 amount = 50
 lifetime = 0.8
@@ -56,6 +56,23 @@ initial_velocity_random = 0.4
 linear_accel = -200.0
 scale_amount = 2.0
 color = Color( 0.8125, 0.8125, 0.8125, 1 )
+
+[node name="smallparticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 25
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.3
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 75.0
+initial_velocity_random = 0.4
+linear_accel = -250.0
+scale_amount = 2.0
+color = Color( 0.964844, 0.38443, 0.38443, 1 )
+hue_variation = 0.1
+hue_variation_random = 0.4
 
 [node name="explode" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 4 )

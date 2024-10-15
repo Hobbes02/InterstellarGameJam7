@@ -6,7 +6,8 @@ var beeps_left: int = 3
 
 onready var explosiontimer: Timer = $explosiontimer
 onready var area: Sprite = $area
-onready var cpu_particles_2d: CPUParticles2D = $CPUParticles2D
+onready var cloudparticles: CPUParticles2D = $cloudparticles
+onready var smallparticles: CPUParticles2D = $smallparticles
 onready var area_2d: Area2D = $Area2D
 onready var circle: Sprite = $circle
 
@@ -47,7 +48,8 @@ func _on_explosiontimer_timeout() -> void:
 	
 	if beeps_left <= 0:
 		circle.hide()
-		cpu_particles_2d.emitting = true
+		cloudparticles.emitting = true
+		smallparticles.emitting = true
 		$explode.play()
 		for i in area_2d.get_overlapping_bodies():
 			if i.has_method("take_damage"):
