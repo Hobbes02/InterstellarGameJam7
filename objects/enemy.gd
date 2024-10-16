@@ -113,7 +113,7 @@ onready var damageparticles: CPUParticles2D = $damageparticles
 onready var shoot: AudioStreamPlayer2D = $shoot
 onready var hit: AudioStreamPlayer2D = $hit
 onready var throw: AudioStreamPlayer2D = $throw
-onready var reload: AudioStreamPlayer = $reload
+onready var reload: AudioStreamPlayer2D = $reload
 
 
 func _ready() -> void:

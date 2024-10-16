@@ -166,7 +166,7 @@ stream = ExtResource( 4 )
 attenuation = 8.0
 bus = "SFX"
 
-[node name="reload" type="AudioStreamPlayer" parent="."]
+[node name="reload" type="AudioStreamPlayer2D" parent="."]
 volume_db = 10.0
 bus = "SFX"
 
