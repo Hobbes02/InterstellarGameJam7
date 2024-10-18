@@ -16,7 +16,9 @@ onready var enemies: Node2D = $enemies
 onready var bullets: Node2D = $bullets
 onready var background: ColorRect = $background
 onready var enemyspawntimer: Timer = $enemyspawntimer
-onready var overlay: TextureRect = $HUD/overlay
+onready var overlay: ColorRect = $HUD/overlay
+onready var suboverlay: TextureRect = $HUD/overlay/overlay
+onready var possesstext: TextureRect = $HUD/overlay/text
 onready var player: KinematicBody2D = $player
 onready var enemy_target: Node = player
 onready var weaponlabel: Label = $HUD/weaponlabel
@@ -63,7 +65,6 @@ func _input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
-	pointslabel.text = str(Globals.points)
 	if enemies.get_child_count() < 2 and !Globals.dead and has_game_started:
 		spawn_enemy()
 	if Input.is_action_just_pressed("elevate") and !Globals.dead:
@@ -91,15 +92,17 @@ func _process(delta: float) -> void:
 		music.volume_db = -80
 		elevatedmusic.volume_db = 0
 		if player.current_hovering_enemy != null:
-			overlay.start_color = lerp(
-				overlay.start_color,
+			possesstext.modulate.a = lerp(possesstext.modulate.a, 1, 8.0 * delta)
+			suboverlay.start_color = lerp(
+				suboverlay.start_color,
 				player.current_hovering_enemy.color,
 				10.0 * delta
 			)
 			weaponlabel.text = player.current_hovering_enemy.weapon_type
 		else:
-			overlay.start_color = lerp(
-				overlay.start_color,
+			possesstext.modulate.a = lerp(possesstext.modulate.a, 0, 8.0 * delta)
+			suboverlay.start_color = lerp(
+				suboverlay.start_color,
 				Color(0.988235, 0.27451, 0.27451),
 				10.0 * delta
 			)

@@ -21,7 +21,8 @@ onready var enemy_stats: Dictionary = {
 		"reload_time": 1.4, 
 		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
 		"weapon_type": "pistol", 
-		"points": 5
+		"points": 5, 
+		"damage_function": "basic_damage"
 	}, 
 	ENEMY_TYPES.SHOOTER: {
 		"node": $shooter, 
@@ -35,7 +36,8 @@ onready var enemy_stats: Dictionary = {
 		"reload_time": 1.8, 
 		"reload_sound": preload("res://assets/sfx/shotgun_reload.mp3"), 
 		"weapon_type": "shotgun", 
-		"points": 10
+		"points": 10, 
+		"damage_function": "shooter_damage"
 	}, 
 	ENEMY_TYPES.DODGER: {
 		"node": $dodger, 
@@ -49,7 +51,8 @@ onready var enemy_stats: Dictionary = {
 		"reload_time": 1.0, 
 		"reload_sound": null, 
 		"weapon_type": "grenade", 
-		"points": 15
+		"points": 15, 
+		"damage_function": "dodger_damage"
 	}, 
 	ENEMY_TYPES.TUTORIAL: {
 		"node": $dodger, 
@@ -63,7 +66,8 @@ onready var enemy_stats: Dictionary = {
 		"reload_time": 1.4, 
 		"reload_sound": preload("res://assets/sfx/pistol_reload.mp3"), 
 		"weapon_type": "pistol", 
-		"points": 0
+		"points": 0, 
+		"damage_function": "dodger_damage"
 	}
 }
 
@@ -174,10 +178,7 @@ func _physics_process(delta: float) -> void:
 			if !can_shoot:
 				return
 			if bullets_left_in_mag <= 0:
-				if reloadtimer.is_stopped():
-					reloadtimer.start()
-					reloadindicator.show()
-					reload.play()
+				pass
 			elif !cooldowntimer.is_stopped():
 				return
 			else:
@@ -196,6 +197,12 @@ func _physics_process(delta: float) -> void:
 				else:
 					emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 8, Color(1, 0.658824, 0.172549))
 					bullets_left_in_mag -= 1
+				
+				if bullets_left_in_mag <= 0:
+					if reloadtimer.is_stopped():
+						reloadtimer.start()
+						reloadindicator.show()
+						reload.play()
 	else:
 		if health == max_health:
 			healthbar.hide()
@@ -219,13 +226,13 @@ func _process(delta: float) -> void:
 
 func take_damage() -> void:
 	health -= 1
-	
 	hit.play()
-	
 	healthbar.show()
 	healthbar.value = health
 	
 	damageparticles.emitting = true
+	
+	call(enemy_stats[enemy_type].damage_function)
 	
 	if is_player_controlling:
 		SignalBus.emit_signal("player_hit")
@@ -274,6 +281,16 @@ func _on_enemyshoottimer_timeout() -> void:
 
 func basic_damage() -> void:
 	$basic/Polygon2D.color = Color(1, 1, 1)
-	yield(get_tree().create_timer(0.2), "timeout")
+	yield(get_tree().create_timer(0.1), "timeout")
 	$basic/Polygon2D.color = color
+
+func shooter_damage() -> void:
+	$shooter/Polygon2D.color = Color(1, 1, 1)
+	yield(get_tree().create_timer(0.1), "timeout")
+	$shooter/Polygon2D.color = color
+
+func dodger_damage() -> void:
+	$dodger/circle.modulate = Color(1, 1, 1)
+	yield(get_tree().create_timer(0.1), "timeout")
+	$dodger/circle.modulate = color
 
