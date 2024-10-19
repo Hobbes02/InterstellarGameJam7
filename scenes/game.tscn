@@ -31,7 +31,7 @@ font_data = ExtResource( 5 )
 size = 32
 font_data = ExtResource( 5 )
 
-[sub_resource type="Shader" id=19]
+[sub_resource type="Shader" id=21]
 code = "shader_type canvas_item;
 
 uniform float scroll_speed : hint_range(0, 2) = 0.08;
@@ -64,7 +64,7 @@ void fragment() {
 "
 
 [sub_resource type="ShaderMaterial" id=20]
-shader = SubResource( 19 )
+shader = SubResource( 21 )
 shader_param/scroll_speed = 0.03
 shader_param/angle_degrees = 0.0
 shader_param/repeat_x = 4.0

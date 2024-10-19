@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/tutorial.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://objects/elevated.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/music/tutorial.mp3" type="AudioStream" id=7]
 [ext_resource path="res://assets/music/tutorial_filtered.mp3" type="AudioStream" id=8]
+[ext_resource path="res://assets/art/possesstext.png" type="Texture" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 93.5 )
@@ -19,7 +20,83 @@ extents = Vector2( 148, 9.75 )
 size = 12
 font_data = ExtResource( 4 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Shader" id=19]
+code = "shader_type canvas_item;
+
+uniform float scroll_speed : hint_range(0, 2) = 0.08;
+uniform float angle_degrees : hint_range(0, 360) = 45.0;
+uniform float repeat_x : hint_range(1, 20) = 20;
+uniform float repeat_y : hint_range(1, 20) = 12;
+uniform float row_offset : hint_range(0, 1) = 1;
+uniform sampler2D texture_to_scroll;
+uniform vec2 texture_size;
+
+void fragment() {
+ float angle_rad = radians(angle_degrees);
+
+ vec2 direction = vec2(cos(angle_rad), sin(angle_rad));
+
+ vec2 offset_uv = UV - (TIME * scroll_speed * direction);
+
+ float offset = fract(floor(offset_uv.y * repeat_y) * 0.5) > 0.0 ? (row_offset * 0.324) : 0.0;
+
+ offset_uv.x += offset;
+
+ vec2 scaled_uv = vec2(fract(offset_uv.x * repeat_x), 
+              fract(offset_uv.y * repeat_y));
+
+ vec2 texelSize = vec2(1.0) / texture_size;
+ vec2 snappedUV = round(scaled_uv / texelSize) * texelSize;
+
+ COLOR = texture(texture_to_scroll, snappedUV);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=20]
+shader = SubResource( 19 )
+shader_param/scroll_speed = 0.03
+shader_param/angle_degrees = 0.0
+shader_param/repeat_x = 4.0
+shader_param/repeat_y = 20.0
+shader_param/row_offset = 1.0
+shader_param/texture_size = Vector2( 180, 180 )
+shader_param/texture_to_scroll = ExtResource( 9 )
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+
+// Our gradient texture.
+uniform sampler2D colormap : hint_black;
+
+void fragment() {
+	// Sample the node's texture and extract the red channel from the image.
+	float noise = texture(TEXTURE, UV).r;
+	// Convert the noise value to a horizontal position to sample the gradient texture.
+	vec2 uv_noise = vec2(noise, 0);
+	// Replace greyscale values from the input texture by a color from the gradient texture.
+	COLOR = texture(colormap, uv_noise);
+}"
+
+[sub_resource type="Gradient" id=21]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.511013 )
+colors = PoolColorArray( 0.988235, 0.27451, 0.27451, 1, 0.8125, 0.8125, 0.8125, 1 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 21 )
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = SubResource( 6 )
+shader_param/colormap = SubResource( 9 )
+
+[sub_resource type="OpenSimplexNoise" id=5]
+
+[sub_resource type="NoiseTexture" id=23]
+width = 296
+height = 182
+noise = SubResource( 5 )
+
+[sub_resource type="Animation" id=24]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("music:volume_db")
@@ -190,8 +267,36 @@ text = "elevate and move over
 an enemy to possess it"
 align = 1
 
-[node name="overlay" parent="." index="7" instance=ExtResource( 6 )]
+[node name="overlay" type="ColorRect" parent="." index="7"]
 modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = -10.0
+margin_right = 264.0
+margin_bottom = 160.0
+color = Color( 0.8125, 0.8125, 0.8125, 1 )
+
+[node name="text" type="TextureRect" parent="overlay" index="0"]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 20 )
+margin_left = 133.0
+margin_top = -153.0
+margin_right = 483.0
+margin_bottom = 197.0
+rect_rotation = 45.0
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 1
+
+[node name="overlay" parent="overlay" index="1" instance=ExtResource( 6 )]
+material = SubResource( 22 )
+margin_left = -2.0
+margin_top = -2.0
+margin_right = 294.0
+margin_bottom = 180.0
+texture = SubResource( 23 )
+end_color = Color( 0.811765, 0.811765, 0.811765, 0 )
 
 [node name="player" parent="." index="8" instance=ExtResource( 3 )]
 
@@ -219,7 +324,7 @@ autoplay = true
 bus = "Music"
 
 [node name="animations" type="AnimationPlayer" parent="." index="13"]
-anims/RESET = SubResource( 5 )
+anims/RESET = SubResource( 24 )
 anims/fadeout = SubResource( 4 )
 
 [node name="fade" type="ColorRect" parent="." index="14"]

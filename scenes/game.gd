@@ -73,6 +73,7 @@ func _process(delta: float) -> void:
 		for e in enemies.get_children():
 			e.is_player_controlling = false
 	elif Input.is_action_just_released("elevate"):
+		possesstext.modulate.a = 1
 		Globals.elevated = false
 		enemyspawntimer.paused = false
 		for e in enemies.get_children():
@@ -92,7 +93,6 @@ func _process(delta: float) -> void:
 		music.volume_db = -80
 		elevatedmusic.volume_db = 0
 		if player.current_hovering_enemy != null:
-			possesstext.modulate.a = lerp(possesstext.modulate.a, 1, 8.0 * delta)
 			suboverlay.start_color = lerp(
 				suboverlay.start_color,
 				player.current_hovering_enemy.color,
@@ -100,7 +100,6 @@ func _process(delta: float) -> void:
 			)
 			weaponlabel.text = player.current_hovering_enemy.weapon_type
 		else:
-			possesstext.modulate.a = lerp(possesstext.modulate.a, 0, 8.0 * delta)
 			suboverlay.start_color = lerp(
 				suboverlay.start_color,
 				Color(0.988235, 0.27451, 0.27451),
@@ -108,13 +107,14 @@ func _process(delta: float) -> void:
 			)
 			weaponlabel.text = ""
 	else:
+		possesstext.modulate.a = lerp(possesstext.modulate.a, 0, 8.0 * delta)
 		overlay.modulate.a = lerp(overlay.modulate.a, 0, 10.0 * delta)
 		Globals.speed_scale = lerp(Globals.speed_scale, 1, 10.0 * delta)
 		music.volume_db = 0
 		elevatedmusic.volume_db = -80
 
 
-func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549)) -> void:
+func _on_shoot_bullet(from: Vector2, speed: int, target: Vector2, collision_mask: int, color: Color = Color(1, 0.658824, 0.172549), is_player: bool = false) -> void:
 	var b = BULLET.instance()
 	b.global_position = from
 	bullets.add_child(b)

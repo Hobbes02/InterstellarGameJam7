@@ -1,11 +1,10 @@
 extends Camera2D
 
-const MAX_SHAKE_STRENGTH: float = 30.0
-
 var current_noise_position: float = 0
 var shake_strength: float = 0.0
 
 export(OpenSimplexNoise) var noise
+export(int) var max_shake_strength = 20.0
 
 
 func _process(delta: float) -> void:
@@ -15,11 +14,11 @@ func _process(delta: float) -> void:
 
 
 func shake() -> void:
-	shake_strength = MAX_SHAKE_STRENGTH
+	shake_strength = max_shake_strength
 
 
 func get_camera_offset(delta: float) -> Vector2:
-	current_noise_position += delta * MAX_SHAKE_STRENGTH
+	current_noise_position += delta * max_shake_strength
 	
 	return Vector2(
 		noise.get_noise_2d(1, current_noise_position) * shake_strength, 

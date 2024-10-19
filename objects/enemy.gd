@@ -72,7 +72,7 @@ onready var enemy_stats: Dictionary = {
 }
 
 
-signal shoot_bullet(from, speed, target, mask, color)
+signal shoot_bullet(from, speed, target, mask, color, is_player)
 signal throw_grenade(from, target, mask, color)
 signal player_die(node)
 signal enemy_die(enemy_type)
@@ -192,10 +192,10 @@ func _physics_process(delta: float) -> void:
 					bullets_left_in_mag -= 1
 				elif enemy_type == ENEMY_TYPES.SHOOTER:
 					for i in [bullet_target, bullet_target + Vector2(40, 40), bullet_target - Vector2(40, 40)]:
-						emit_signal("shoot_bullet", global_position, bullet_speed, i, 8, Color(1, 0.658824, 0.172549))
+						emit_signal("shoot_bullet", global_position, bullet_speed, i, 8, Color(1, 0.658824, 0.172549), true)
 					bullets_left_in_mag -= 3
 				else:
-					emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 8, Color(1, 0.658824, 0.172549))
+					emit_signal("shoot_bullet", global_position, bullet_speed, bullet_target, 8, Color(1, 0.658824, 0.172549), true)
 					bullets_left_in_mag -= 1
 				
 				if bullets_left_in_mag <= 0:
